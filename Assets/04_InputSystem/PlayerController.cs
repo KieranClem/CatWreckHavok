@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
 
     public float fJumpForce = 5f;
     public float fSpeed = 1f;
+
+    private bool bCanJump = true;
     
 
     private void Awake()
@@ -38,9 +40,18 @@ public class PlayerController : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if(context.performed && bCanJump)
         {
             rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
+            bCanJump = false;
         }    
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Floor")
+        {
+            bCanJump = true;
+        }
     }
 }
