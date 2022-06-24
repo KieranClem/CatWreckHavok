@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -352,6 +352,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c306ab9937072ca46ba991519852ddd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fJumpForce: 5
+  fSpeed: 1
 --- !u!114 &753453718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,7 +381,27 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 753453717}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: Jump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3bc78368-e3f5-4bf2-9cb3-e4b5e6328124
+    m_ActionName: Player/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bdf427ce-59f2-4209-a444-b453cd59c4f8
+    m_ActionName: Player/Dash[/Keyboard/period]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 753453712}
         m_TargetAssemblyTypeName: 
         m_MethodName: 
         m_Mode: 1
@@ -391,8 +413,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 3bc78368-e3f5-4bf2-9cb3-e4b5e6328124
-    m_ActionName: Player/Jump[/Keyboard/space]
+    m_ActionId: 113de4d4-5f4e-45a4-804d-6b803ffafbfe
+    m_ActionName: Player/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7cad910b-52c0-4352-a7b3-6fea2da6cd5f
+    m_ActionName: UI/Select[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
