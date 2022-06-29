@@ -27,7 +27,7 @@ public class FurnitureManager : MonoBehaviour
     {
         ruinedFurniture.Add(ruinFurniture);
         //Checks if the player has knocked down enough furniture by counting the amount of game objects in the list
-        if(ruinedFurniture.Count > iNumOfFurnitureForLevelFinish)
+        if(ruinedFurniture.Count >= iNumOfFurnitureForLevelFinish)
         {
             //Add code to allow for exit to open here
         }
