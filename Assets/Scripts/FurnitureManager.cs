@@ -9,6 +9,8 @@ public class FurnitureManager : MonoBehaviour
     private List<Furniture> ruinedFurniture = new List<Furniture>();
     //Number of furntiture needed to finish the level which can be changed in the inspector, default is 1
     public int iNumOfFurnitureForLevelFinish = 1;
+    //Store Finish point
+    public FinishLevel finishLevel;
 
     private void Awake()
     {
@@ -29,7 +31,8 @@ public class FurnitureManager : MonoBehaviour
         //Checks if the player has knocked down enough furniture by counting the amount of game objects in the list
         if(ruinedFurniture.Count >= iNumOfFurnitureForLevelFinish)
         {
-            //Add code to allow for exit to open here
+            //Allows the finish level point to move the player back to overworld
+            finishLevel.canFinish = true;
         }
     }
 
