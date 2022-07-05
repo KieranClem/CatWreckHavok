@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour
         //Double Jump, checks if the player has already performed the double jump
         else if(context.performed && bDoubleJump)
         {
+            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
             rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
             bDoubleJump = false;
         }
