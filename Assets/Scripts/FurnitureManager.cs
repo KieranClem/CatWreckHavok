@@ -22,6 +22,8 @@ public class FurnitureManager : MonoBehaviour
             //Stores the furniture manager in the furniture's script for easy access
             furniture.furnitureManager = this;
         }
+
+        finishLevel = GameObject.FindGameObjectWithTag("FinishLevel").GetComponent<FinishLevel>();
     }
 
     //called when the player knocks down some furniture to add to the ruined furniture list
