@@ -359,6 +359,7 @@ MonoBehaviour:
   fSpeed: 0.4
   fDashSpeed: 10
   fStompSpeed: 30
+  CoyoteTime: 0.5
 --- !u!114 &753453718
 MonoBehaviour:
   m_ObjectHideFlags: 0

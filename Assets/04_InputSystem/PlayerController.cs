@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
 
     //access information about the capsule collider
     private CapsuleCollider2D capsuleCollider;
+
+    public float CoyoteTime = 0.2f;
+    private float CoyoteTimeCounter;
+    private bool bCoyoteTimeActive = false;
     
 
     private void Awake()
@@ -39,6 +43,22 @@ public class PlayerController : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
+    }
+
+    private void Update()
+    {
+        if(!bCoyoteTimeActive)
+        {
+            CoyoteTimeCounter = CoyoteTime;
+        }
+        else
+        {
+            CoyoteTimeCounter -= Time.deltaTime;
+            if(CoyoteTimeCounter <= 0)
+            {
+                bCanJump = false;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -54,6 +74,7 @@ public class PlayerController : MonoBehaviour
         //Normal Jump, checks if the player has already jumped
         if(context.performed && bCanJump)
         {
+            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
             rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
             bCanJump = false;
         }
@@ -120,6 +141,14 @@ public class PlayerController : MonoBehaviour
             bCanJump = true;
             bDoubleJump = true;
             bCanDash = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.tag == "Floor")
+        {
+            bCoyoteTimeActive = true;
         }
     }
 }
