@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     //Stomp information
     public float fStompSpeed = 1f;
+    private bool bInStomp = false;
 
     //access information about the capsule collider
     private CapsuleCollider2D capsuleCollider;
@@ -39,8 +40,10 @@ public class PlayerController : MonoBehaviour
     //Info for switch characters
     public PlayableCharacter currentCharacter;
 
+    //Stores checkpoint
     private Transform CheckPoint;
 
+    //Stores current character switch
     private CharacterSwitch characterSwitch = null;
     
 
@@ -142,6 +145,7 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody2D.velocity = Vector2.zero;
             rigidbody2D.velocity = Vector2.down * fStompSpeed;
+            bInStomp = true;
         }
     }
 
@@ -197,6 +201,7 @@ public class PlayerController : MonoBehaviour
                 }
 
                 bCoyoteTimeActive = false;
+                bInStomp = false;
                 break;
 
             case "CharacterSwitcher":
@@ -210,6 +215,26 @@ public class PlayerController : MonoBehaviour
 
             case "DeathZone":
                 SendPlayertoCheckPoint();
+                break;
+
+            case "BreakableFloor":
+                if(!bInStomp)
+                {
+                    //Acts as normal ground if not in stomp
+                    bCanJump = true;
+                    bCanDash = true;
+                    if (currentCharacter == PlayableCharacter.Spring)
+                    {
+                        bDoubleJump = true;
+                    }
+
+                    bCoyoteTimeActive = false;
+                }
+                else
+                {
+                    //Deactivates ground below, later could add animation of ground breaking but currently will just disappear
+                    collision.gameObject.SetActive(false);
+                }
                 break;
         }
     }
