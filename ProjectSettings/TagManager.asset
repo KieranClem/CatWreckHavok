@@ -7,6 +7,9 @@ TagManager:
   - Floor
   - Furniture
   - FinishLevel
+  - CharacterSwitcher
+  - DeathZone
+  - CheckPoint
   layers:
   - Default
   - TransparentFX
