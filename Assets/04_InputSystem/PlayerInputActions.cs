@@ -257,6 +257,78 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""OverworldPlayerMovement"",
+            ""id"": ""a5b68cfc-ab49-432b-a08a-e0fbe2223481"",
+            ""actions"": [
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""Value"",
+                    ""id"": ""bbe736a0-503b-486b-bb0b-1824d364c1cc"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""2d925657-df9a-4f03-b3c1-25c9dd6fa7e1"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""8cadbef1-ef76-4c69-a544-3b817bb6be38"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""90567b5c-42c9-4c2e-bde4-372f08d8df8c"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""212a99ad-31f0-4e2c-89ac-8fe9ec4724e1"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""062912c8-c252-47c1-9434-e9f2c105ac26"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -294,6 +366,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Select = m_UI.FindAction("Select", throwIfNotFound: true);
+        // OverworldPlayerMovement
+        m_OverworldPlayerMovement = asset.FindActionMap("OverworldPlayerMovement", throwIfNotFound: true);
+        m_OverworldPlayerMovement_Movement = m_OverworldPlayerMovement.FindAction("Movement", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -447,6 +522,39 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // OverworldPlayerMovement
+    private readonly InputActionMap m_OverworldPlayerMovement;
+    private IOverworldPlayerMovementActions m_OverworldPlayerMovementActionsCallbackInterface;
+    private readonly InputAction m_OverworldPlayerMovement_Movement;
+    public struct OverworldPlayerMovementActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public OverworldPlayerMovementActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_OverworldPlayerMovement_Movement;
+        public InputActionMap Get() { return m_Wrapper.m_OverworldPlayerMovement; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(OverworldPlayerMovementActions set) { return set.Get(); }
+        public void SetCallbacks(IOverworldPlayerMovementActions instance)
+        {
+            if (m_Wrapper.m_OverworldPlayerMovementActionsCallbackInterface != null)
+            {
+                @Movement.started -= m_Wrapper.m_OverworldPlayerMovementActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_OverworldPlayerMovementActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_OverworldPlayerMovementActionsCallbackInterface.OnMovement;
+            }
+            m_Wrapper.m_OverworldPlayerMovementActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+            }
+        }
+    }
+    public OverworldPlayerMovementActions @OverworldPlayerMovement => new OverworldPlayerMovementActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -476,5 +584,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     public interface IUIActions
     {
         void OnSelect(InputAction.CallbackContext context);
+    }
+    public interface IOverworldPlayerMovementActions
+    {
+        void OnMovement(InputAction.CallbackContext context);
     }
 }
