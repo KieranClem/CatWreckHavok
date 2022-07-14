@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 572787021}
   m_Layer: 0
   m_Name: Square
-  m_TagString: FinishLevel
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,10 +150,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 572787020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f869c26e45aeb84a9c393cf54345c10, type: 3}
+  m_Script: {fileID: 11500000, guid: 3efc9f508f066a14d942e41635cbdd8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canFinish: 0
+  characterToSwitchTo: 0
 --- !u!212 &572787022
 SpriteRenderer:
   m_ObjectHideFlags: 0

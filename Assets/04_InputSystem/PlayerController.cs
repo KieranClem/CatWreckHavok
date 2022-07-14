@@ -27,9 +27,24 @@ public class PlayerController : MonoBehaviour
 
     //Stomp information
     public float fStompSpeed = 1f;
+    private bool bInStomp = false;
 
     //access information about the capsule collider
     private CapsuleCollider2D capsuleCollider;
+
+    //Coyote Time Information
+    public float CoyoteTime = 0.2f;
+    private float CoyoteTimeCounter;
+    private bool bCoyoteTimeActive = false;
+
+    //Info for switch characters
+    public PlayableCharacter currentCharacter;
+
+    //Stores checkpoint
+    private Transform CheckPoint;
+
+    //Stores current character switch
+    private CharacterSwitch characterSwitch = null;
     
 
     private void Awake()
@@ -39,6 +54,26 @@ public class PlayerController : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
+        
+        SwitchCharacter(currentCharacter);
+
+        inputActions.actions["SwitchCharacter"].Disable();
+    }
+
+    private void Update()
+    {
+        if(!bCoyoteTimeActive)
+        {
+            CoyoteTimeCounter = CoyoteTime;
+        }
+        else
+        {
+            CoyoteTimeCounter -= Time.deltaTime;
+            if(CoyoteTimeCounter <= 0)
+            {
+                bCanJump = false;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -54,6 +89,7 @@ public class PlayerController : MonoBehaviour
         //Normal Jump, checks if the player has already jumped
         if(context.performed && bCanJump)
         {
+            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
             rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
             bCanJump = false;
         }
@@ -109,17 +145,113 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody2D.velocity = Vector2.zero;
             rigidbody2D.velocity = Vector2.down * fStompSpeed;
+            bInStomp = true;
         }
+    }
+
+    //checks to see if a button has been pressed to switch character
+    public void activateCharacterSwitch(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            SwitchCharacter(characterSwitch.characterToSwitchTo);
+        }  
+    }
+
+    //Deactivates the action that the character doesn't have access to, will need to add sprite change here later on
+    private void SwitchCharacter(PlayableCharacter character)
+    {
+        currentCharacter = character;
+        if(currentCharacter == PlayableCharacter.Spring)
+        {
+            bDoubleJump = true;
+            inputActions.actions["Dash"].Disable();
+            inputActions.actions["Stomp"].Disable();
+        }
+        else if (currentCharacter == PlayableCharacter.Dash)
+        {
+            inputActions.actions["Dash"].Enable();
+            inputActions.actions["Stomp"].Disable();
+            bDoubleJump = false;
+        }
+        else if (currentCharacter == PlayableCharacter.Slam)
+        {
+            inputActions.actions["Stomp"].Enable();
+            inputActions.actions["Dash"].Disable();
+            bDoubleJump = false;
+        }
+    }
+
+    private void SendPlayertoCheckPoint()
+    {
+        this.transform.position = CheckPoint.position;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //resets jumps and other information once the player has landed
-        if(collision.tag == "Floor")
+        //Checks all the possible tags the player can interact with and activates the appropriate code
+        switch(collision.tag)
         {
-            bCanJump = true;
-            bDoubleJump = true;
-            bCanDash = true;
+            case "Floor":
+                bCanJump = true;
+                bCanDash = true;
+                if (currentCharacter == PlayableCharacter.Spring)
+                {
+                    bDoubleJump = true;
+                }
+
+                bCoyoteTimeActive = false;
+                bInStomp = false;
+                break;
+
+            case "CharacterSwitcher":
+                inputActions.actions["SwitchCharacter"].Enable();
+                characterSwitch = collision.GetComponent<CharacterSwitch>();
+                break;
+
+            case "CheckPoint":
+                CheckPoint = collision.GetComponent<Transform>();
+                break;
+
+            case "DeathZone":
+                SendPlayertoCheckPoint();
+                break;
+
+            case "BreakableFloor":
+                if(!bInStomp)
+                {
+                    //Acts as normal ground if not in stomp
+                    bCanJump = true;
+                    bCanDash = true;
+                    if (currentCharacter == PlayableCharacter.Spring)
+                    {
+                        bDoubleJump = true;
+                    }
+
+                    bCoyoteTimeActive = false;
+                }
+                else
+                {
+                    //Deactivates ground below, later could add animation of ground breaking but currently will just disappear
+                    collision.gameObject.SetActive(false);
+                }
+                break;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        //Checks all the possible tags the player can interact with and activates the appropriate code
+        switch (collision.tag)
+        {
+            case "Floor":
+                bCoyoteTimeActive = true;
+                break;
+
+            case "CharacterSwitcher":
+                inputActions.actions["SwitchCharacter"].Disable();
+                characterSwitch = null;
+                break;
         }
     }
 }

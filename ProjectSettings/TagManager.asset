@@ -7,6 +7,10 @@ TagManager:
   - Floor
   - Furniture
   - FinishLevel
+  - CharacterSwitcher
+  - DeathZone
+  - CheckPoint
+  - BreakableFloor
   layers:
   - Default
   - TransparentFX
