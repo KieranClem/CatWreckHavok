@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     //Stores the mask for the platforms, used to determine if the player is on the ground when dashing
     [SerializeField] private LayerMask platformLayerMask;
+    [SerializeField] private LayerMask enemyLayerMask;
     
     //Variable stored that are needed for the movement
     private Rigidbody2D rigidbody2D;
@@ -72,6 +73,18 @@ public class PlayerController : MonoBehaviour
             if(CoyoteTimeCounter <= 0)
             {
                 bCanJump = false;
+            }
+        }
+
+        //If player lands on top of enemy bounces them up, currently only goes up same height as normaal jump
+        if(!bCanJump)
+        {
+            float extraHeight = 0.01f;
+            RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, enemyLayerMask);
+            if(raycastHit.collider != null)
+            {
+                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
             }
         }
     }
