@@ -11,6 +11,7 @@ TagManager:
   - DeathZone
   - CheckPoint
   - BreakableFloor
+  - LevelEntrance
   layers:
   - Default
   - TransparentFX

@@ -25,7 +25,9 @@ public class PlayerController : MonoBehaviour
 
     //dash information
     public float fDashSpeed = 1f;
+    public float fDashTime = 1f;
     private bool bCanDash = true;
+    private bool bDashing = false;
 
     //Stomp information
     public float fStompSpeed = 1f;
@@ -89,7 +91,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(rigidbody2D.velocity.magnitude > fMaxSpeed)
+        if((rigidbody2D.velocity.magnitude > fMaxSpeed) && !bDashing)
         {
             rigidbody2D.velocity = rigidbody2D.velocity.normalized * fMaxSpeed;
         }
@@ -143,6 +145,9 @@ public class PlayerController : MonoBehaviour
                 //will need to figure out how to handle dash when the player isn't moving, might look to store the last direction input they had but not sure
             }
 
+            StopCoroutine(DashCounter());
+            StartCoroutine(DashCounter());
+
             //checks if the player is still on the ground, allows them to keep dashing if they are
             float extraHeight = 0.01f;
             RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, platformLayerMask);
@@ -155,6 +160,13 @@ public class PlayerController : MonoBehaviour
                 bCanDash = false;
             }
         }
+    }
+
+    IEnumerator DashCounter()
+    {
+        bDashing = true;
+        yield return new WaitForSeconds(fDashTime);
+        bDashing = false;
     }
 
     public void Stomp(InputAction.CallbackContext context)

@@ -601,6 +601,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: bbe736a0-503b-486b-bb0b-1824d364c1cc
     m_ActionName: OverworldPlayerMovement/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8ba8c391-268a-4709-b099-2aad0a2bd4f1
+    m_ActionName: OverworldPlayerMovement/Select[/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -806,7 +810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3efc9f508f066a14d942e41635cbdd8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterToSwitchTo: 1
+  characterToSwitchTo: 0
 --- !u!61 &1153488169
 BoxCollider2D:
   m_ObjectHideFlags: 0
