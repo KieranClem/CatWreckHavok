@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Movement information")]
     public float fJumpForce = 5f;
     public float fSpeed = 1f;
+    public float fMaxSpeed = 5f;
 
     //info for if the player can jump/double jump
     private bool bCanJump = true;
@@ -86,6 +87,11 @@ public class PlayerController : MonoBehaviour
                 rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
                 rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
             }
+        }
+
+        if(rigidbody2D.velocity.magnitude > fMaxSpeed)
+        {
+            rigidbody2D.velocity = rigidbody2D.velocity.normalized * fMaxSpeed;
         }
     }
 

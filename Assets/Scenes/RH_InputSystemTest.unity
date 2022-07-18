@@ -483,6 +483,7 @@ MonoBehaviour:
     m_Bits: 128
   fJumpForce: 5
   fSpeed: 0.4
+  fMaxSpeed: 5
   fDashSpeed: 10
   fStompSpeed: 30
   CoyoteTime: 0.5
