@@ -12,6 +12,7 @@ TagManager:
   - CheckPoint
   - BreakableFloor
   - LevelEntrance
+  - PressurePlate
   layers:
   - Default
   - TransparentFX

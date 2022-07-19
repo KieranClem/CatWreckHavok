@@ -145,7 +145,9 @@ public class PlayerController : MonoBehaviour
                 //will need to figure out how to handle dash when the player isn't moving, might look to store the last direction input they had but not sure
             }
 
+            //Stops previous dash counter if active
             StopCoroutine(DashCounter());
+            //Starts new one
             StartCoroutine(DashCounter());
 
             //checks if the player is still on the ground, allows them to keep dashing if they are
@@ -267,6 +269,17 @@ public class PlayerController : MonoBehaviour
                     collision.gameObject.SetActive(false);
                 }
                 break;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(collision.tag == "PressurePlate")
+        {
+            if(collision.transform.position.y <= transform.position.y)
+            {
+                collision.GetComponent<PressurePlate>().bPressureActivated = true;
+            }
         }
     }
 
