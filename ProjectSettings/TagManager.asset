@@ -11,6 +11,8 @@ TagManager:
   - DeathZone
   - CheckPoint
   - BreakableFloor
+  - LevelEntrance
+  - PressurePlate
   layers:
   - Default
   - TransparentFX
@@ -19,7 +21,7 @@ TagManager:
   - Water
   - UI
   - Platforms
-  - 
+  - Enemies
   - 
   - 
   - 
