@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     //Stores the mask for the platforms, used to determine if the player is on the ground when dashing
     [SerializeField] private LayerMask platformLayerMask;
+    [SerializeField] private LayerMask enemyLayerMask;
     
     //Variable stored that are needed for the movement
     private Rigidbody2D rigidbody2D;
@@ -16,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Movement information")]
     public float fJumpForce = 5f;
     public float fSpeed = 1f;
+    public float fMaxSpeed = 5f;
 
     //info for if the player can jump/double jump
     private bool bCanJump = true;
@@ -23,7 +25,9 @@ public class PlayerController : MonoBehaviour
 
     //dash information
     public float fDashSpeed = 1f;
+    public float fDashTime = 1f;
     private bool bCanDash = true;
+    private bool bDashing = false;
 
     //Stomp information
     public float fStompSpeed = 1f;
@@ -73,6 +77,23 @@ public class PlayerController : MonoBehaviour
             {
                 bCanJump = false;
             }
+        }
+
+        //If player lands on top of enemy bounces them up, currently only goes up same height as normaal jump
+        if(!bCanJump)
+        {
+            float extraHeight = 0.01f;
+            RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, enemyLayerMask);
+            if(raycastHit.collider != null)
+            {
+                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
+            }
+        }
+
+        if((rigidbody2D.velocity.magnitude > fMaxSpeed) && !bDashing)
+        {
+            rigidbody2D.velocity = rigidbody2D.velocity.normalized * fMaxSpeed;
         }
     }
 
@@ -124,6 +145,11 @@ public class PlayerController : MonoBehaviour
                 //will need to figure out how to handle dash when the player isn't moving, might look to store the last direction input they had but not sure
             }
 
+            //Stops previous dash counter if active
+            StopCoroutine(DashCounter());
+            //Starts new one
+            StartCoroutine(DashCounter());
+
             //checks if the player is still on the ground, allows them to keep dashing if they are
             float extraHeight = 0.01f;
             RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, platformLayerMask);
@@ -136,6 +162,13 @@ public class PlayerController : MonoBehaviour
                 bCanDash = false;
             }
         }
+    }
+
+    IEnumerator DashCounter()
+    {
+        bDashing = true;
+        yield return new WaitForSeconds(fDashTime);
+        bDashing = false;
     }
 
     public void Stomp(InputAction.CallbackContext context)
@@ -236,6 +269,17 @@ public class PlayerController : MonoBehaviour
                     collision.gameObject.SetActive(false);
                 }
                 break;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(collision.tag == "PressurePlate")
+        {
+            if(collision.transform.position.y <= transform.position.y)
+            {
+                collision.GetComponent<PressurePlate>().bPressureActivated = true;
+            }
         }
     }
 
