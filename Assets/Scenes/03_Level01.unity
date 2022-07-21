@@ -88551,6 +88551,16 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
+  - first: {x: 41, y: -17, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 13
+      m_TileSpriteIndex: 13
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   - first: {x: 64, y: -17, z: 0}
     second:
       serializedVersion: 2
@@ -97039,7 +97049,7 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 6a11f15ea96b42c4e95ee2cd3e562bc9, type: 2}
   - m_RefCount: 30
     m_Data: {fileID: 11400000, guid: 17a5738c67413e5489480b7085b0d254, type: 2}
-  - m_RefCount: 84
+  - m_RefCount: 85
     m_Data: {fileID: 11400000, guid: 10e2c981c5979b0478ee9b809a992d8d, type: 2}
   - m_RefCount: 19
     m_Data: {fileID: 11400000, guid: fb2cafcbf443d554b80fb75193fb863c, type: 2}
@@ -97070,12 +97080,12 @@ Tilemap:
     m_Data: {fileID: -6138261225164204169, guid: c4100deab24afbf4f9b5c51439f4a42b, type: 3}
   - m_RefCount: 30
     m_Data: {fileID: 3172499106029640202, guid: c4100deab24afbf4f9b5c51439f4a42b, type: 3}
-  - m_RefCount: 84
+  - m_RefCount: 85
     m_Data: {fileID: -1846078004610576582, guid: c4100deab24afbf4f9b5c51439f4a42b, type: 3}
   - m_RefCount: 19
     m_Data: {fileID: 5214815886125721352, guid: dbca4cb5f60fb6a4ea1259b7c4d34fb3, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 4754
+  - m_RefCount: 4755
     m_Data:
       e00: 1
       e01: 0
@@ -97094,7 +97104,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 4754
+  - m_RefCount: 4755
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -97684,11 +97694,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fSpeed
-      value: 0.3
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
+      propertyPath: fMaxSpeed
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fJumpForce
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: currentCharacter
@@ -97705,6 +97719,10 @@ PrefabInstance:
     - target: {fileID: 207728231837650685, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: m_Mass
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 207728231837650685, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
+      propertyPath: m_LinearDrag
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650686, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: m_RootOrder
