@@ -13,16 +13,37 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidbody2D;
     private PlayerInput inputActions;
     private PlayerInputActions playerInputActions;
-    
-    [Header("Player Movement information")]
-    public float fJumpForce = 5f;
-    public float fSpeed = 1f;
-    public float fMaxSpeed = 5f;
+
+    [Header("Select Character")]
+    //Info for switch characters
+    public PlayableCharacter currentCharacter;
+
+    //Character's unique stats, not used in the actual calculations, just used to set variables that are actually used in the calculations
+    [Header("Spring's Movement")]
+    public float fSpringJumpForce = 5f;
+    public float fSpringMovementSpeed = 5f;
+    public float fSpringMaxSpeed = 10f;
+
+    [Header("Dash's Movement")]
+    public float fDashJumpForce = 5f;
+    public float fDashMovementSpeed = 5f;
+    public float fDashMaxSpeed = 10f;
+
+    [Header("Slam's Movement")]
+    public float fSlamJumpForce = 5f;
+    public float fSlamMovementSpeed = 5f;
+    public float fSlamMaxSpeed = 5f;
+
+    //Variables that will actually be used
+    private float fJumpForce = 5f;
+    private float fSpeed = 1f;
+    private float fMaxSpeed = 5f;
 
     //info for if the player can jump/double jump
     private bool bCanJump = true;
     private bool bDoubleJump = true;
 
+    [Header("Ability information")]
     //dash information
     public float fDashSpeed = 1f;
     public float fDashTime = 1f;
@@ -40,9 +61,6 @@ public class PlayerController : MonoBehaviour
     public float CoyoteTime = 0.2f;
     private float CoyoteTimeCounter;
     private bool bCoyoteTimeActive = false;
-
-    //Info for switch characters
-    public PlayableCharacter currentCharacter;
 
     //Stores checkpoint
     private Transform CheckPoint;
@@ -89,11 +107,36 @@ public class PlayerController : MonoBehaviour
                 rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
                 rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
             }
+
+            RaycastHit2D JumpRaycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, platformLayerMask);
+            if(JumpRaycastHit.collider != null)
+            {
+                bCanDash = true;
+                bCanJump = true;
+                bCoyoteTimeActive = false;
+                bInStomp = false;
+                Debug.Log("Activate");
+                if (currentCharacter == PlayableCharacter.Spring)
+                {
+                    bDoubleJump = true;
+                }
+            }
         }
 
-        if((rigidbody2D.velocity.magnitude > fMaxSpeed) && !bDashing)
+        if((rigidbody2D.velocity.x > fMaxSpeed) && !bDashing)
         {
-            rigidbody2D.velocity = rigidbody2D.velocity.normalized * fMaxSpeed;
+            //rigidbody2D.velocity = rigidbody2D.velocity.normalized * fMaxSpeed;
+            rigidbody2D.velocity = new Vector2(fMaxSpeed, rigidbody2D.velocity.y);
+        }
+
+        if(rigidbody2D.velocity.x < -fMaxSpeed && !bDashing)
+        {
+            rigidbody2D.velocity = new Vector2(-fMaxSpeed, rigidbody2D.velocity.y);
+        }
+
+        if(bDashing)
+        {
+            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
         }
     }
 
@@ -112,7 +155,7 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
             rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
-            bCanJump = false;
+            //bCanJump = false;
         }
         //Double Jump, checks if the player has already performed the double jump
         else if(context.performed && bDoubleJump)
@@ -200,18 +243,27 @@ public class PlayerController : MonoBehaviour
             bDoubleJump = true;
             inputActions.actions["Dash"].Disable();
             inputActions.actions["Stomp"].Disable();
+            fJumpForce = fSpringJumpForce;
+            fSpeed = fSpringMovementSpeed;
+            fMaxSpeed = fSpringMaxSpeed;
         }
         else if (currentCharacter == PlayableCharacter.Dash)
         {
             inputActions.actions["Dash"].Enable();
             inputActions.actions["Stomp"].Disable();
             bDoubleJump = false;
+            fJumpForce = fDashJumpForce;
+            fSpeed = fDashMovementSpeed;
+            fMaxSpeed = fDashMaxSpeed;
         }
         else if (currentCharacter == PlayableCharacter.Slam)
         {
             inputActions.actions["Stomp"].Enable();
             inputActions.actions["Dash"].Disable();
             bDoubleJump = false;
+            fJumpForce = fSlamJumpForce;
+            fSpeed = fSlamMovementSpeed;
+            fMaxSpeed = fSlamMaxSpeed;
         }
     }
 
@@ -225,7 +277,7 @@ public class PlayerController : MonoBehaviour
         //Checks all the possible tags the player can interact with and activates the appropriate code
         switch(collision.tag)
         {
-            case "Floor":
+            /*case "Floor":
                 bCanJump = true;
                 bCanDash = true;
                 if (currentCharacter == PlayableCharacter.Spring)
@@ -235,7 +287,7 @@ public class PlayerController : MonoBehaviour
 
                 bCoyoteTimeActive = false;
                 bInStomp = false;
-                break;
+                break;*/
 
             case "CharacterSwitcher":
                 inputActions.actions["SwitchCharacter"].Enable();

@@ -97716,6 +97716,10 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: -0.16
       objectReference: {fileID: 0}
+    - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
+      propertyPath: currentCharacter
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 207728231837650685, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: m_Mass
       value: 1
