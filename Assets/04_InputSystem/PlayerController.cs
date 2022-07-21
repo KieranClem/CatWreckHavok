@@ -123,9 +123,15 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if((rigidbody2D.velocity.magnitude > fMaxSpeed) && !bDashing)
+        if((rigidbody2D.velocity.x > fMaxSpeed) && !bDashing)
         {
-            rigidbody2D.velocity = rigidbody2D.velocity.normalized * fMaxSpeed;
+            //rigidbody2D.velocity = rigidbody2D.velocity.normalized * fMaxSpeed;
+            rigidbody2D.velocity = new Vector2(fMaxSpeed, rigidbody2D.velocity.y);
+        }
+
+        if(rigidbody2D.velocity.x < -fMaxSpeed && !bDashing)
+        {
+            rigidbody2D.velocity = new Vector2(-fMaxSpeed, rigidbody2D.velocity.y);
         }
 
         if(bDashing)

@@ -237,7 +237,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &753453713
 Transform:
   m_ObjectHideFlags: 0
@@ -358,7 +358,7 @@ MonoBehaviour:
   enemyLayerMask:
     serializedVersion: 2
     m_Bits: 128
-  currentCharacter: 2
+  currentCharacter: 1
   fSpringJumpForce: 7
   fSpringMovementSpeed: 5
   fSpringMaxSpeed: 5
@@ -575,6 +575,10 @@ PrefabInstance:
     - target: {fileID: 207728231837650687, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: m_Name
       value: Player (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 207728231837650687, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
