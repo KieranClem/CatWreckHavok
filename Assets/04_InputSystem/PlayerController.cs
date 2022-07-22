@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Animations;
 
 public class PlayerController : MonoBehaviour
 {
@@ -108,6 +109,7 @@ public class PlayerController : MonoBehaviour
                 rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
             }
 
+            //Checks if the player hits the floor
             RaycastHit2D JumpRaycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, platformLayerMask);
             if(JumpRaycastHit.collider != null)
             {
@@ -115,7 +117,6 @@ public class PlayerController : MonoBehaviour
                 bCanJump = true;
                 bCoyoteTimeActive = false;
                 bInStomp = false;
-                Debug.Log("Activate");
                 if (currentCharacter == PlayableCharacter.Spring)
                 {
                     bDoubleJump = true;
@@ -125,7 +126,6 @@ public class PlayerController : MonoBehaviour
 
         if((rigidbody2D.velocity.x > fMaxSpeed) && !bDashing)
         {
-            //rigidbody2D.velocity = rigidbody2D.velocity.normalized * fMaxSpeed;
             rigidbody2D.velocity = new Vector2(fMaxSpeed, rigidbody2D.velocity.y);
         }
 
