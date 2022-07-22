@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Animations;
 
 public class PlayerController : MonoBehaviour
 {
@@ -67,7 +68,11 @@ public class PlayerController : MonoBehaviour
 
     //Stores current character switch
     private CharacterSwitch characterSwitch = null;
-    
+
+    private Animator animator;
+    public RuntimeAnimatorController SpringAnimationController;
+    public RuntimeAnimatorController DashAnimationController;
+    public RuntimeAnimatorController SlamAnimationController;
 
     private void Awake()
     {
@@ -75,6 +80,7 @@ public class PlayerController : MonoBehaviour
         inputActions = GetComponent<PlayerInput>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         playerInputActions = new PlayerInputActions();
+        animator = GetComponent<Animator>();
         playerInputActions.Player.Enable();
         
         SwitchCharacter(currentCharacter);
@@ -108,6 +114,7 @@ public class PlayerController : MonoBehaviour
                 rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
             }
 
+            //Checks if the player hits the floor
             RaycastHit2D JumpRaycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, platformLayerMask);
             if(JumpRaycastHit.collider != null)
             {
@@ -115,7 +122,6 @@ public class PlayerController : MonoBehaviour
                 bCanJump = true;
                 bCoyoteTimeActive = false;
                 bInStomp = false;
-                Debug.Log("Activate");
                 if (currentCharacter == PlayableCharacter.Spring)
                 {
                     bDoubleJump = true;
@@ -125,7 +131,6 @@ public class PlayerController : MonoBehaviour
 
         if((rigidbody2D.velocity.x > fMaxSpeed) && !bDashing)
         {
-            //rigidbody2D.velocity = rigidbody2D.velocity.normalized * fMaxSpeed;
             rigidbody2D.velocity = new Vector2(fMaxSpeed, rigidbody2D.velocity.y);
         }
 
@@ -238,11 +243,17 @@ public class PlayerController : MonoBehaviour
     private void SwitchCharacter(PlayableCharacter character)
     {
         currentCharacter = character;
-        if(currentCharacter == PlayableCharacter.Spring)
+        if (currentCharacter == PlayableCharacter.Spring)
         {
             bDoubleJump = true;
             inputActions.actions["Dash"].Disable();
             inputActions.actions["Stomp"].Disable();
+
+            if (SpringAnimationController != null) 
+            { 
+                animator.runtimeAnimatorController = SpringAnimationController;
+            }
+
             fJumpForce = fSpringJumpForce;
             fSpeed = fSpringMovementSpeed;
             fMaxSpeed = fSpringMaxSpeed;
@@ -252,6 +263,12 @@ public class PlayerController : MonoBehaviour
             inputActions.actions["Dash"].Enable();
             inputActions.actions["Stomp"].Disable();
             bDoubleJump = false;
+
+            if (DashAnimationController != null)
+            {
+                animator.runtimeAnimatorController = DashAnimationController;
+            }
+
             fJumpForce = fDashJumpForce;
             fSpeed = fDashMovementSpeed;
             fMaxSpeed = fDashMaxSpeed;
@@ -261,6 +278,12 @@ public class PlayerController : MonoBehaviour
             inputActions.actions["Stomp"].Enable();
             inputActions.actions["Dash"].Disable();
             bDoubleJump = false;
+
+            if (SlamAnimationController != null)
+            {
+                animator.runtimeAnimatorController = SlamAnimationController;
+            }
+
             fJumpForce = fSlamJumpForce;
             fSpeed = fSlamMovementSpeed;
             fMaxSpeed = fSlamMaxSpeed;
