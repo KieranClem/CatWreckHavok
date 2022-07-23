@@ -13,6 +13,7 @@ TagManager:
   - BreakableFloor
   - LevelEntrance
   - PressurePlate
+  - Patrol Zone
   layers:
   - Default
   - TransparentFX
