@@ -38,7 +38,7 @@ public class AIPatrol : MonoBehaviour
 
         if (hit.collider != null)
         {
-            if (hit.transform.tag == "Floor")
+            if (hit.transform.tag == "Patrol Zone")
             {
                 bIsGoingRight = !bIsGoingRight;
                 _mSpriteRenderer.flipX = bIsGoingRight;

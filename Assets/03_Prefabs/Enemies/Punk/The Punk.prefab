@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 2472040561168837427}
   - component: {fileID: 5648325457772783920}
   - component: {fileID: 7166418549926165530}
-  - component: {fileID: 1811792407}
-  m_Layer: 0
+  - component: {fileID: -6185525571201843467}
+  m_Layer: 7
   m_Name: The Punk
-  m_TagString: Untagged
+  m_TagString: DeathZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b48ba40fc97cf3544afd57bf744e7c7c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -124,8 +124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9eb73bce979c06e4382e5dcd72ab841a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMovementSpeed: 3
-  bIsGoingRight: 1
+  mMovementSpeed: 1
+  bIsGoingRight: 0
   mRaycastingDistance: 1
 --- !u!50 &7166418549926165530
 Rigidbody2D:
@@ -147,19 +147,23 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!114 &1811792407
-MonoBehaviour:
+  m_Constraints: 4
+--- !u!95 &-6185525571201843467
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 55525011578930061}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eb73bce979c06e4382e5dcd72ab841a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mMovementSpeed: 3
-  bIsGoingRight: 1
-  mRaycastingDistance: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0a73b47d718cae14784b96233c198101, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
