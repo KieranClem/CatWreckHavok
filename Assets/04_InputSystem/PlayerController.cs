@@ -24,16 +24,19 @@ public class PlayerController : MonoBehaviour
     public float fSpringJumpForce = 5f;
     public float fSpringMovementSpeed = 5f;
     public float fSpringMaxSpeed = 10f;
+    public float fSpringDrag = 1f;
 
     [Header("Dash's Movement")]
     public float fDashJumpForce = 5f;
     public float fDashMovementSpeed = 5f;
     public float fDashMaxSpeed = 10f;
+    public float fDashDrag = 1f;
 
     [Header("Slam's Movement")]
     public float fSlamJumpForce = 5f;
     public float fSlamMovementSpeed = 5f;
     public float fSlamMaxSpeed = 5f;
+    public float fSlamDrag = 1f;
 
     //Variables that will actually be used
     private float fJumpForce = 5f;
@@ -257,6 +260,7 @@ public class PlayerController : MonoBehaviour
             fJumpForce = fSpringJumpForce;
             fSpeed = fSpringMovementSpeed;
             fMaxSpeed = fSpringMaxSpeed;
+            rigidbody2D.drag = fSpringDrag;
         }
         else if (currentCharacter == PlayableCharacter.Dash)
         {
@@ -272,6 +276,7 @@ public class PlayerController : MonoBehaviour
             fJumpForce = fDashJumpForce;
             fSpeed = fDashMovementSpeed;
             fMaxSpeed = fDashMaxSpeed;
+            rigidbody2D.drag = fDashDrag;
         }
         else if (currentCharacter == PlayableCharacter.Slam)
         {
@@ -287,6 +292,7 @@ public class PlayerController : MonoBehaviour
             fJumpForce = fSlamJumpForce;
             fSpeed = fSlamMovementSpeed;
             fMaxSpeed = fSlamMaxSpeed;
+            rigidbody2D.drag = fSlamDrag;
         }
     }
 
