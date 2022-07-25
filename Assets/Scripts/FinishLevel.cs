@@ -6,12 +6,14 @@ using UnityEngine.SceneManagement;
 public class FinishLevel : MonoBehaviour
 {
     [HideInInspector]public bool canFinish = false;
+    public string SceneToChangeTo;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(canFinish)
         {
             //Insert change scene info here
+            SceneManager.LoadScene(SceneToChangeTo);
         }
     }
 }
