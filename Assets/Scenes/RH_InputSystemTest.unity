@@ -1026,7 +1026,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504123, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: currentCharacter
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504124, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: m_Material
