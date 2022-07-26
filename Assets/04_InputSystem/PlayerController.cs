@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
     public float fDashMovementSpeed = 5f;
     public float fDashMaxSpeed = 10f;
     public float fDashDrag = 1f;
+    //Boolean used to store the direction the player was facing during movement, used to know which direction to dash after movement has stopped
+    private bool LeftRightDash = true;
 
     [Header("Slam's Movement")]
     public float fSlamJumpForce = 5f;
@@ -154,6 +156,10 @@ public class PlayerController : MonoBehaviour
         //Basic movement, gets the player inputs and moves them in the direction they pressed
         Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
         rigidbody2D.AddForce(new Vector2(inputVector.x, 0) * fSpeed, ForceMode2D.Impulse);
+        if (inputVector.x > 0)
+            LeftRightDash = true;
+        else if (inputVector.x < 0)
+            LeftRightDash = false;
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -192,8 +198,11 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Debug.Log("wasn't moving");
-                //will need to figure out how to handle dash when the player isn't moving, might look to store the last direction input they had but not sure
+                //Dash when the player hasn't been moving
+                if(LeftRightDash)
+                    rigidbody2D.velocity = Vector2.right * fDashSpeed;
+                else
+                    rigidbody2D.velocity = Vector2.left * fDashSpeed;
             }
 
             //Stops previous dash counter if active
