@@ -104281,7 +104281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &676984989
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -105220,6 +105220,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650687, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 207728231837650687, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -109280,7 +109284,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703094814}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.64, y: 2.5292, z: -0.074}
+  m_LocalPosition: {x: 13.64, y: 2.5292, z: -0.04}
   m_LocalScale: {x: 0.7674, y: 2.9969037, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

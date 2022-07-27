@@ -8,12 +8,14 @@ public class FinishLevel : MonoBehaviour
     [HideInInspector]public bool canFinish = false;
     public string SceneToChangeTo;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(canFinish)
+        Debug.Log(canFinish);
+        if (collision.tag == "Player" && canFinish)
         {
             //Insert change scene info here
             SceneManager.LoadScene(SceneToChangeTo);
+
         }
     }
 }
