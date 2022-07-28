@@ -108125,6 +108125,10 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
+      propertyPath: fDashDrag
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fDashTime
       value: 0.4
       objectReference: {fileID: 0}
@@ -108134,7 +108138,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fSlamDrag
-      value: 0.5
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: CoyoteTime
@@ -108150,7 +108154,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fSpringDrag
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fStompSpeed
@@ -108166,11 +108170,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fDashJumpForce
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fSlamJumpForce
-      value: 7
+      value: 19.5
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fSpringMaxSpeed
@@ -108182,15 +108186,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fSpringJumpForce
-      value: 13
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fDashMovementSpeed
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fSlamMovementSpeed
-      value: 0.3
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650682, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: fSpringMovementSpeed
@@ -108218,7 +108222,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650685, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: m_Mass
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 207728231837650685, guid: 117979f4e6077314091032b0a24b6e9f, type: 3}
       propertyPath: m_LinearDrag
