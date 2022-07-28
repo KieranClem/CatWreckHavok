@@ -1021,12 +1021,16 @@ PrefabInstance:
       value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504123, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
+      propertyPath: CoyoteTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1503112777654504123, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: fSpringDrag
       value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504123, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: currentCharacter
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504124, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: m_Material
@@ -1225,7 +1229,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4356998254340675342, guid: a3c518a0d23bef94797706f8582ca1a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.65
+      value: 0.17
       objectReference: {fileID: 0}
     - target: {fileID: 4356998254340675342, guid: a3c518a0d23bef94797706f8582ca1a1, type: 3}
       propertyPath: m_LocalPosition.z

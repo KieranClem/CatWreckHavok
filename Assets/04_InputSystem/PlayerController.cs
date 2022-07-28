@@ -169,7 +169,7 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
             rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
-            //bCanJump = false;
+            bCanJump = false;
         }
         //Double Jump, checks if the player has already performed the double jump
         else if(context.performed && bDoubleJump)
@@ -236,6 +236,7 @@ public class PlayerController : MonoBehaviour
         //Checks if the player is in the air before being able to stomp
         if(context.performed && !bCanJump)
         {
+            Debug.Log("Here");
             rigidbody2D.velocity = Vector2.zero;
             rigidbody2D.velocity = Vector2.down * fStompSpeed;
             bInStomp = true;
@@ -381,7 +382,9 @@ public class PlayerController : MonoBehaviour
             case "Floor":
                 bCoyoteTimeActive = true;
                 break;
-
+            case "BreakableFloor":
+                bCoyoteTimeActive = true;
+                break;
             case "CharacterSwitcher":
                 inputActions.actions["SwitchCharacter"].Disable();
                 characterSwitch = null;
