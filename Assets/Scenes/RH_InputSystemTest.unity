@@ -555,6 +555,7 @@ MonoBehaviour:
   fSpringMovementSpeed: 5
   fSpringMaxSpeed: 5
   fSpringDrag: 1
+  fSpringBounce: 1
   fDashJumpForce: 7
   fDashMovementSpeed: 5
   fDashMaxSpeed: 10
@@ -1040,12 +1041,20 @@ PrefabInstance:
       propertyPath: m_LinearDrag
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1503112777654504125, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504126, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: m_Name
       value: Player (1)
       objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504127, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1503112777654504127, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
+      propertyPath: m_LocalScale.x
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504127, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}

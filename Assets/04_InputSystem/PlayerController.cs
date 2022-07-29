@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public float fSpringMovementSpeed = 5f;
     public float fSpringMaxSpeed = 10f;
     public float fSpringDrag = 1f;
+    public float fSpringBounce = 1f;
 
     [Header("Dash's Movement")]
     public float fDashJumpForce = 5f;
@@ -74,10 +75,13 @@ public class PlayerController : MonoBehaviour
     //Stores current character switch
     private CharacterSwitch characterSwitch = null;
 
+    //Animation variables
     private Animator animator;
     public RuntimeAnimatorController SpringAnimationController;
     public RuntimeAnimatorController DashAnimationController;
     public RuntimeAnimatorController SlamAnimationController;
+
+    private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
@@ -87,6 +91,7 @@ public class PlayerController : MonoBehaviour
         playerInputActions = new PlayerInputActions();
         animator = GetComponent<Animator>();
         playerInputActions.Player.Enable();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         
         SwitchCharacter(currentCharacter);
 
@@ -112,11 +117,14 @@ public class PlayerController : MonoBehaviour
         if(!bCanJump)
         {
             float extraHeight = 0.01f;
-            RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, enemyLayerMask);
-            if(raycastHit.collider != null)
-            {
-                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
-                rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
+            if (currentCharacter == PlayableCharacter.Spring)
+            {  
+                RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, enemyLayerMask);
+                if (raycastHit.collider != null)
+                {
+                    rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                    rigidbody2D.AddForce(Vector2.up * fSpringBounce, ForceMode2D.Impulse);
+                }
             }
 
             //Checks if the player hits the floor
@@ -157,9 +165,18 @@ public class PlayerController : MonoBehaviour
         Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
         rigidbody2D.AddForce(new Vector2(inputVector.x, 0) * fSpeed, ForceMode2D.Impulse);
         if (inputVector.x > 0)
+        {
             LeftRightDash = true;
+            spriteRenderer.flipX = false;
+        }
         else if (inputVector.x < 0)
+        {
             LeftRightDash = false;
+            spriteRenderer.flipX = true;
+        }
+
+        animator.SetFloat("Horizontal", inputVector.x);
+        animator.SetFloat("Speed", rigidbody2D.velocity.x);
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -248,7 +265,9 @@ public class PlayerController : MonoBehaviour
     {
         if(context.performed)
         {
+            PlayableCharacter storeOld = currentCharacter;
             SwitchCharacter(characterSwitch.characterToSwitchTo);
+            characterSwitch.characterToSwitchTo = storeOld;
         }  
     }
 

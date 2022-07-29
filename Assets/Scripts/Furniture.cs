@@ -23,6 +23,7 @@ public class Furniture : MonoBehaviour
         {
             furnitureManager.addRuinedFurniture(this);
             bKnockedDown = true;
+            this.gameObject.SetActive(false);
         }
     }
 }
