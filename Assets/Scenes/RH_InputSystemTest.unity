@@ -555,6 +555,7 @@ MonoBehaviour:
   fSpringMovementSpeed: 5
   fSpringMaxSpeed: 5
   fSpringDrag: 1
+  fSpringBounce: 1
   fDashJumpForce: 7
   fDashMovementSpeed: 5
   fDashMaxSpeed: 10
@@ -1021,6 +1022,10 @@ PrefabInstance:
       value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504123, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
+      propertyPath: CoyoteTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1503112777654504123, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: fSpringDrag
       value: 1.2
       objectReference: {fileID: 0}
@@ -1036,12 +1041,20 @@ PrefabInstance:
       propertyPath: m_LinearDrag
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1503112777654504125, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504126, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: m_Name
       value: Player (1)
       objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504127, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1503112777654504127, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
+      propertyPath: m_LocalScale.x
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1503112777654504127, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
@@ -1225,7 +1238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4356998254340675342, guid: a3c518a0d23bef94797706f8582ca1a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.65
+      value: 0.17
       objectReference: {fileID: 0}
     - target: {fileID: 4356998254340675342, guid: a3c518a0d23bef94797706f8582ca1a1, type: 3}
       propertyPath: m_LocalPosition.z

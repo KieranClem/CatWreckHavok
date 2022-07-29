@@ -25,12 +25,15 @@ public class PlayerController : MonoBehaviour
     public float fSpringMovementSpeed = 5f;
     public float fSpringMaxSpeed = 10f;
     public float fSpringDrag = 1f;
+    public float fSpringBounce = 1f;
 
     [Header("Dash's Movement")]
     public float fDashJumpForce = 5f;
     public float fDashMovementSpeed = 5f;
     public float fDashMaxSpeed = 10f;
     public float fDashDrag = 1f;
+    //Boolean used to store the direction the player was facing during movement, used to know which direction to dash after movement has stopped
+    private bool LeftRightDash = true;
 
     [Header("Slam's Movement")]
     public float fSlamJumpForce = 5f;
@@ -72,10 +75,13 @@ public class PlayerController : MonoBehaviour
     //Stores current character switch
     private CharacterSwitch characterSwitch = null;
 
+    //Animation variables
     private Animator animator;
     public RuntimeAnimatorController SpringAnimationController;
     public RuntimeAnimatorController DashAnimationController;
     public RuntimeAnimatorController SlamAnimationController;
+
+    private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
@@ -85,6 +91,7 @@ public class PlayerController : MonoBehaviour
         playerInputActions = new PlayerInputActions();
         animator = GetComponent<Animator>();
         playerInputActions.Player.Enable();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         
         SwitchCharacter(currentCharacter);
 
@@ -110,11 +117,14 @@ public class PlayerController : MonoBehaviour
         if(!bCanJump)
         {
             float extraHeight = 0.01f;
-            RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, enemyLayerMask);
-            if(raycastHit.collider != null)
-            {
-                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
-                rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
+            if (currentCharacter == PlayableCharacter.Spring)
+            {  
+                RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, enemyLayerMask);
+                if (raycastHit.collider != null)
+                {
+                    rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                    rigidbody2D.AddForce(Vector2.up * fSpringBounce, ForceMode2D.Impulse);
+                }
             }
 
             //Checks if the player hits the floor
@@ -154,6 +164,19 @@ public class PlayerController : MonoBehaviour
         //Basic movement, gets the player inputs and moves them in the direction they pressed
         Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
         rigidbody2D.AddForce(new Vector2(inputVector.x, 0) * fSpeed, ForceMode2D.Impulse);
+        if (inputVector.x > 0)
+        {
+            LeftRightDash = true;
+            spriteRenderer.flipX = false;
+        }
+        else if (inputVector.x < 0)
+        {
+            LeftRightDash = false;
+            spriteRenderer.flipX = true;
+        }
+
+        animator.SetFloat("Horizontal", inputVector.x);
+        animator.SetFloat("Speed", rigidbody2D.velocity.x);
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -163,7 +186,7 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
             rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
-            //bCanJump = false;
+            bCanJump = false;
         }
         //Double Jump, checks if the player has already performed the double jump
         else if(context.performed && bDoubleJump)
@@ -192,8 +215,11 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Debug.Log("wasn't moving");
-                //will need to figure out how to handle dash when the player isn't moving, might look to store the last direction input they had but not sure
+                //Dash when the player hasn't been moving
+                if(LeftRightDash)
+                    rigidbody2D.velocity = Vector2.right * fDashSpeed;
+                else
+                    rigidbody2D.velocity = Vector2.left * fDashSpeed;
             }
 
             //Stops previous dash counter if active
@@ -227,6 +253,7 @@ public class PlayerController : MonoBehaviour
         //Checks if the player is in the air before being able to stomp
         if(context.performed && !bCanJump)
         {
+            Debug.Log("Here");
             rigidbody2D.velocity = Vector2.zero;
             rigidbody2D.velocity = Vector2.down * fStompSpeed;
             bInStomp = true;
@@ -238,7 +265,9 @@ public class PlayerController : MonoBehaviour
     {
         if(context.performed)
         {
+            PlayableCharacter storeOld = currentCharacter;
             SwitchCharacter(characterSwitch.characterToSwitchTo);
+            characterSwitch.characterToSwitchTo = storeOld;
         }  
     }
 
@@ -372,7 +401,9 @@ public class PlayerController : MonoBehaviour
             case "Floor":
                 bCoyoteTimeActive = true;
                 break;
-
+            case "BreakableFloor":
+                bCoyoteTimeActive = true;
+                break;
             case "CharacterSwitcher":
                 inputActions.actions["SwitchCharacter"].Disable();
                 characterSwitch = null;
