@@ -1033,6 +1033,10 @@ PrefabInstance:
       propertyPath: currentCharacter
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1503112777654504123, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
+      propertyPath: SlamAnimationController
+      value: 
+      objectReference: {fileID: 9100000, guid: fa99f1d3d672d4140993e04b7e0a97df, type: 2}
     - target: {fileID: 1503112777654504124, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: m_Material
       value: 
