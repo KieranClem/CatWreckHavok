@@ -64,6 +64,8 @@ public class PlayerController : MonoBehaviour
     //access information about the capsule collider
     private CapsuleCollider2D capsuleCollider;
 
+    private BoxCollider2D BoxCollider2D;
+
     //Coyote Time Information
     public float CoyoteTime = 0.2f;
     private float CoyoteTimeCounter;
@@ -88,6 +90,7 @@ public class PlayerController : MonoBehaviour
         rigidbody2D = GetComponent<Rigidbody2D>();
         inputActions = GetComponent<PlayerInput>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
+        BoxCollider2D = GetComponent<BoxCollider2D>();
         playerInputActions = new PlayerInputActions();
         animator = GetComponent<Animator>();
         playerInputActions.Player.Enable();
@@ -116,19 +119,22 @@ public class PlayerController : MonoBehaviour
         //If player lands on top of enemy bounces them up, currently only goes up same height as normaal jump
         if(!bCanJump)
         {
-            float extraHeight = 0.01f;
+            float extraHeight = 0.1f;
             if (currentCharacter == PlayableCharacter.Spring)
-            {  
+            {
                 RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, enemyLayerMask);
                 if (raycastHit.collider != null)
                 {
+                    Debug.Log("here");
+
                     rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
                     rigidbody2D.AddForce(Vector2.up * fSpringBounce, ForceMode2D.Impulse);
                 }
             }
 
+            float extraHeightLanding = 0.01f;
             //Checks if the player hits the floor
-            RaycastHit2D JumpRaycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, platformLayerMask);
+            RaycastHit2D JumpRaycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeightLanding, platformLayerMask);
             if(JumpRaycastHit.collider != null)
             {
                 bCanDash = true;
@@ -148,7 +154,30 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if((rigidbody2D.velocity.x > fMaxSpeed) && !bDashing)
+        if(bInStomp)
+        {
+            float extraHeight = 1f;
+            if (LeftRightDash)
+            {
+                RaycastHit2D raycastHit = Physics2D.Raycast(BoxCollider2D.bounds.center, Vector2.right, BoxCollider2D.bounds.extents.x + extraHeight, enemyLayerMask);
+                if(raycastHit.collider != null)
+                {
+                    raycastHit.collider.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.right * (fStompSpeed/2);
+                }
+            }
+            else
+            {
+                RaycastHit2D raycastHit = Physics2D.Raycast(BoxCollider2D.bounds.center, Vector2.left, BoxCollider2D.bounds.extents.x + extraHeight, enemyLayerMask);
+                if (raycastHit.collider != null)
+                {
+                    raycastHit.collider.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.left * (fStompSpeed / 2);
+                }
+            }
+
+            
+        }
+
+        if ((rigidbody2D.velocity.x > fMaxSpeed) && !bDashing)
         {
             rigidbody2D.velocity = new Vector2(fMaxSpeed, rigidbody2D.velocity.y);
         }
@@ -178,8 +207,6 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetBool("IsMoving", true);
             }
-            //animator.SetFloat("Horizontal", inputVector.x);
-            //animator.SetFloat("Speed", rigidbody2D.velocity.x);
         }
         else if (inputVector.x < 0)
         {
@@ -189,8 +216,6 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetBool("IsMoving", true);
             }
-            //animator.SetFloat("Horizontal", inputVector.x);
-            //animator.SetFloat("Speed", rigidbody2D.velocity.x);
         }
         else
         {
@@ -276,13 +301,44 @@ public class PlayerController : MonoBehaviour
     public void Stomp(InputAction.CallbackContext context)
     {
         //Checks if the player is in the air before being able to stomp
-        if(context.performed && !bCanJump)
+        if(context.performed)
         {
-            rigidbody2D.velocity = Vector2.zero;
-            rigidbody2D.velocity = Vector2.down * fStompSpeed;
-            bInStomp = true;
-            animator.SetBool("isStomping", true);
+            if (bCanJump)
+            {
+                Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
+                if (inputVector.x > 0)
+                {
+                    rigidbody2D.velocity = Vector2.zero;
+                    rigidbody2D.velocity = Vector2.right * fStompSpeed;
+                    bInStomp = true;
+                    animator.SetBool("isStomping", true);
+                }
+                else if (inputVector.x < 0)
+                {
+                    rigidbody2D.velocity = Vector2.zero;
+                    rigidbody2D.velocity = Vector2.left * fStompSpeed;
+                    bInStomp = true;
+                    animator.SetBool("isStomping", true);
+                }
+                StartCoroutine(SlamCounter());
+            }
+            else
+            {
+                rigidbody2D.velocity = Vector2.zero;
+                rigidbody2D.velocity = Vector2.down * fStompSpeed;
+                bInStomp = true;
+                animator.SetBool("isStomping", true);
+            }
+
         }
+    }
+
+    IEnumerator SlamCounter()
+    {
+
+        yield return new WaitForSeconds(1f);
+        bInStomp = false;
+        animator.SetBool("isStomping", false);
     }
 
     //checks to see if a button has been pressed to switch character
@@ -391,6 +447,7 @@ public class PlayerController : MonoBehaviour
                     //Acts as normal ground if not in stomp
                     bCanJump = true;
                     bCanDash = true;
+                    animator.SetBool("IsJumping", false);
                     if (currentCharacter == PlayableCharacter.Spring)
                     {
                         bDoubleJump = true;
