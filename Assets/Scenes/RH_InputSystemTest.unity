@@ -1017,6 +1017,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1503112777654504121, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: abca26f93c9f3c94489506ce79f54411, type: 2}
     - target: {fileID: 1503112777654504123, guid: 3eaf86e4ecdf94942908d2f2e6b6e4e5, type: 3}
       propertyPath: fSlamDrag
       value: 1.5

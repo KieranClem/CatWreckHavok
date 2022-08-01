@@ -139,6 +139,12 @@ public class PlayerController : MonoBehaviour
                 {
                     bDoubleJump = true;
                 }
+                animator.SetBool("IsJumping", false);
+                if (currentCharacter == PlayableCharacter.Slam)
+                {
+                    animator.SetBool("isStomping", false);
+                }
+
             }
         }
 
@@ -168,15 +174,30 @@ public class PlayerController : MonoBehaviour
         {
             LeftRightDash = true;
             spriteRenderer.flipX = false;
+            if (bCanJump)
+            {
+                animator.SetBool("IsMoving", true);
+            }
+            //animator.SetFloat("Horizontal", inputVector.x);
+            //animator.SetFloat("Speed", rigidbody2D.velocity.x);
         }
         else if (inputVector.x < 0)
         {
             LeftRightDash = false;
             spriteRenderer.flipX = true;
+            if (bCanJump)
+            {
+                animator.SetBool("IsMoving", true);
+            }
+            //animator.SetFloat("Horizontal", inputVector.x);
+            //animator.SetFloat("Speed", rigidbody2D.velocity.x);
+        }
+        else
+        {
+            animator.SetBool("IsMoving", false);
         }
 
-        animator.SetFloat("Horizontal", inputVector.x);
-        animator.SetFloat("Speed", rigidbody2D.velocity.x);
+
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -186,7 +207,8 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
             rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
-            bCanJump = false;
+            //bCanJump = false;
+            animator.SetBool("IsJumping", true);
         }
         //Double Jump, checks if the player has already performed the double jump
         else if(context.performed && bDoubleJump)
@@ -222,6 +244,8 @@ public class PlayerController : MonoBehaviour
                     rigidbody2D.velocity = Vector2.left * fDashSpeed;
             }
 
+            animator.SetBool("IsDashing", true);
+
             //Stops previous dash counter if active
             StopCoroutine(DashCounter());
             //Starts new one
@@ -246,6 +270,7 @@ public class PlayerController : MonoBehaviour
         bDashing = true;
         yield return new WaitForSeconds(fDashTime);
         bDashing = false;
+        animator.SetBool("IsDashing", false);
     }
 
     public void Stomp(InputAction.CallbackContext context)
@@ -253,10 +278,10 @@ public class PlayerController : MonoBehaviour
         //Checks if the player is in the air before being able to stomp
         if(context.performed && !bCanJump)
         {
-            Debug.Log("Here");
             rigidbody2D.velocity = Vector2.zero;
             rigidbody2D.velocity = Vector2.down * fStompSpeed;
             bInStomp = true;
+            animator.SetBool("isStomping", true);
         }
     }
 
