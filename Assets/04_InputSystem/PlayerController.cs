@@ -103,12 +103,14 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        //Checks if the coyote time is over or not
         if(!bCoyoteTimeActive)
         {
             CoyoteTimeCounter = CoyoteTime;
         }
         else
         {
+            //counts down until counter reaches 0, if it reaches 0 then they can no longer jump
             CoyoteTimeCounter -= Time.deltaTime;
             if(CoyoteTimeCounter <= 0)
             {
@@ -125,8 +127,6 @@ public class PlayerController : MonoBehaviour
                 RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, enemyLayerMask);
                 if (raycastHit.collider != null)
                 {
-                    Debug.Log("here");
-
                     rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
                     rigidbody2D.AddForce(Vector2.up * fSpringBounce, ForceMode2D.Impulse);
                 }
@@ -146,6 +146,7 @@ public class PlayerController : MonoBehaviour
                     bDoubleJump = true;
                 }
                 animator.SetBool("IsJumping", false);
+                //Stops stoming animation
                 if (currentCharacter == PlayableCharacter.Slam)
                 {
                     animator.SetBool("isStomping", false);
@@ -153,6 +154,7 @@ public class PlayerController : MonoBehaviour
 
             }
         }
+
 
         if(bInStomp)
         {
@@ -177,16 +179,18 @@ public class PlayerController : MonoBehaviour
             
         }
 
+        //Has a max speed, prevents players from going too fast to the right
         if ((rigidbody2D.velocity.x > fMaxSpeed) && !bDashing)
         {
             rigidbody2D.velocity = new Vector2(fMaxSpeed, rigidbody2D.velocity.y);
         }
-
-        if(rigidbody2D.velocity.x < -fMaxSpeed && !bDashing)
+        //Has a max speed, prevents players from going too fast to the left
+        if (rigidbody2D.velocity.x < -fMaxSpeed && !bDashing)
         {
             rigidbody2D.velocity = new Vector2(-fMaxSpeed, rigidbody2D.velocity.y);
         }
 
+        //Stops the player from asending or desending when the player is dashing
         if(bDashing)
         {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
@@ -199,6 +203,8 @@ public class PlayerController : MonoBehaviour
         //Basic movement, gets the player inputs and moves them in the direction they pressed
         Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
         rigidbody2D.AddForce(new Vector2(inputVector.x, 0) * fSpeed, ForceMode2D.Impulse);
+
+        //Plays the animation for moving, flips the sprite if moving left
         if (inputVector.x > 0)
         {
             LeftRightDash = true;
@@ -290,6 +296,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Counts how long the player has been in dash, stops dash when ended
     IEnumerator DashCounter()
     {
         bDashing = true;
@@ -303,6 +310,7 @@ public class PlayerController : MonoBehaviour
         //Checks if the player is in the air before being able to stomp
         if(context.performed)
         {
+            //If the player is on the ground they will charge left or right
             if (bCanJump)
             {
                 Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
@@ -322,6 +330,7 @@ public class PlayerController : MonoBehaviour
                 }
                 StartCoroutine(SlamCounter());
             }
+            //Stomps down if the player is in the air
             else
             {
                 rigidbody2D.velocity = Vector2.zero;
@@ -333,6 +342,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //counts how long the player is in the slam
     IEnumerator SlamCounter()
     {
 
@@ -356,9 +366,11 @@ public class PlayerController : MonoBehaviour
     private void SwitchCharacter(PlayableCharacter character)
     {
         currentCharacter = character;
+        //Switches player character to sping
         if (currentCharacter == PlayableCharacter.Spring)
         {
             bDoubleJump = true;
+            //Disables unneeded animations
             inputActions.actions["Dash"].Disable();
             inputActions.actions["Stomp"].Disable();
 
@@ -372,8 +384,10 @@ public class PlayerController : MonoBehaviour
             fMaxSpeed = fSpringMaxSpeed;
             rigidbody2D.drag = fSpringDrag;
         }
+        //Switches player character to Dash
         else if (currentCharacter == PlayableCharacter.Dash)
         {
+            //Disables unneeded animations/activates needed animations
             inputActions.actions["Dash"].Enable();
             inputActions.actions["Stomp"].Disable();
             bDoubleJump = false;
@@ -388,8 +402,10 @@ public class PlayerController : MonoBehaviour
             fMaxSpeed = fDashMaxSpeed;
             rigidbody2D.drag = fDashDrag;
         }
+        //Switches player character to Slam
         else if (currentCharacter == PlayableCharacter.Slam)
         {
+            //Disables unneeded animations/activates needed animations
             inputActions.actions["Stomp"].Enable();
             inputActions.actions["Dash"].Disable();
             bDoubleJump = false;
@@ -427,18 +443,34 @@ public class PlayerController : MonoBehaviour
                 bCoyoteTimeActive = false;
                 bInStomp = false;
                 break;*/
-
+            //Activates character switcher
             case "CharacterSwitcher":
                 inputActions.actions["SwitchCharacter"].Enable();
                 characterSwitch = collision.GetComponent<CharacterSwitch>();
                 break;
-
+            //Stores checkpoint if collided with checkpoint
             case "CheckPoint":
                 CheckPoint = collision.GetComponent<Transform>();
                 break;
-
+            //Checks if the player hits a area which damages them
             case "DeathZone":
-                SendPlayertoCheckPoint();
+                //checks if the player has jumped on top of an enemy and is spring, if they are they will bounce of their head
+                if((enemyLayerMask.value & 1<< collision.gameObject.layer) == 1 << collision.gameObject.layer)
+                {
+                    if ((transform.position.y > collision.transform.position.y) && (currentCharacter == PlayableCharacter.Spring))
+                    {
+                        rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                        rigidbody2D.AddForce(Vector2.up * fSpringBounce, ForceMode2D.Impulse);
+                    }
+                    else
+                    {
+                        SendPlayertoCheckPoint();
+                    }
+                }
+                else
+                {
+                    SendPlayertoCheckPoint();
+                }
                 break;
 
             case "BreakableFloor":
@@ -464,6 +496,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Checks if the player stays on the pressure plate
     private void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.tag == "PressurePlate")
