@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class OverworldMovement : MonoBehaviour
 {
+    //Variables
     private Rigidbody2D rigidbody2D;
     private PlayerInput inputActions;
     private PlayerInputActions playerInputActions;
@@ -13,7 +14,6 @@ public class OverworldMovement : MonoBehaviour
     private LoadLevel loadLevel;
 
     public float fMovementSpeed = 5f;
-
 
     private void Awake()
     {
@@ -26,18 +26,22 @@ public class OverworldMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //Player movement, get input and move accordingly
         Vector2 inputValue = playerInputActions.OverworldPlayerMovement.Movement.ReadValue<Vector2>();
         rigidbody2D.MovePosition(rigidbody2D.position + inputValue * fMovementSpeed * Time.fixedDeltaTime);
 
     }
 
+    //Interact with level entrance
     public void Interact(InputAction.CallbackContext context)
     {
         
         if (context.performed)
         {
+            //Checks if player is next to enterance point
             if (bNextToEntrance)
             {
+                //Send to next level
                 loadLevel.LoadNextLevel();
             }
         }
@@ -45,6 +49,7 @@ public class OverworldMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //Checks if next to level entrance, allows player to interact by storing the entrance
         if(collision.tag == "LevelEntrance")
         {
             bNextToEntrance = true;
@@ -56,6 +61,7 @@ public class OverworldMovement : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        //Checks if has left entrance, if they have remove it and prevent the player from trying to load a new level
         if (collision.tag == "LevelEntrance")
         {
             bNextToEntrance = false;
