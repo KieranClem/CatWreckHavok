@@ -41,7 +41,7 @@ public class AIPatrol : MonoBehaviour
             if (hit.transform.tag == "Patrol Zone")
             {
                 bIsGoingRight = !bIsGoingRight;
-                _mSpriteRenderer.flipX = bIsGoingRight;
+                _mSpriteRenderer.flipX = !bIsGoingRight;
 
             }
         }

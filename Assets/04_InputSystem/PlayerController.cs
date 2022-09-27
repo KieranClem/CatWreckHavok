@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
         
         SwitchCharacter(currentCharacter);
 
+
         inputActions.actions["SwitchCharacter"].Disable();
     }
 
@@ -233,8 +234,9 @@ public class PlayerController : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
+
         //Normal Jump, checks if the player has already jumped
-        if(context.performed && bCanJump)
+        if (context.performed && bCanJump)
         {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
             rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
@@ -424,6 +426,8 @@ public class PlayerController : MonoBehaviour
 
     private void SendPlayertoCheckPoint()
     {
+        CameraShake.Instance.Shake(0.1f, 5f);
+
         this.transform.position = CheckPoint.position;
     }
 
