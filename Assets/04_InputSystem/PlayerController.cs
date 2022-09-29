@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
         
         SwitchCharacter(currentCharacter);
 
+        ChangeCameraDetails.AdjustCamera.ChangeCamera(this);
 
         inputActions.actions["SwitchCharacter"].Disable();
     }
@@ -451,6 +452,7 @@ public class PlayerController : MonoBehaviour
             case "CharacterSwitcher":
                 inputActions.actions["SwitchCharacter"].Enable();
                 characterSwitch = collision.GetComponent<CharacterSwitch>();
+                ChangeCameraDetails.AdjustCamera.ChangeCamera(this);
                 break;
             //Stores checkpoint if collided with checkpoint
             case "CheckPoint":
