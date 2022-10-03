@@ -98,9 +98,13 @@ public class PlayerController : MonoBehaviour
         
         SwitchCharacter(currentCharacter);
 
-        ChangeCameraDetails.AdjustCamera.ChangeCamera(this);
 
         inputActions.actions["SwitchCharacter"].Disable();
+    }
+
+    private void Start()
+    {
+        ChangeCameraDetails.AdjustCamera.ChangeCamera(this);
     }
 
     private void Update()
