@@ -232,6 +232,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             animator.SetBool("IsMoving", false);
+            rigidbody2D.velocity *= fSpeed / 10;
         }
 
 
@@ -432,6 +433,42 @@ public class PlayerController : MonoBehaviour
     private void SendPlayertoCheckPoint()
     {
         CameraShake.Instance.Shake(0.1f, 5f);
+
+        StartCoroutine(ScreenStop(1));
+    }
+
+    //stops the screen
+    IEnumerator ScreenStop(float StopTime)
+    {
+        GameObject [] Enemies = GameObject.FindGameObjectsWithTag("DeathZone");
+
+        float PlayerGravity = rigidbody2D.gravityScale;
+        capsuleCollider.enabled = false;
+        this.GetComponent<BoxCollider2D>().enabled = false;
+        rigidbody2D.velocity = Vector2.zero;
+
+        rigidbody2D.gravityScale = 0;
+
+        foreach(GameObject deathzone in Enemies)
+        {
+            if(deathzone.GetComponent<AIPatrol>() != null)
+            {
+                deathzone.GetComponent<AIPatrol>().enabled = false;
+            }
+        }
+        yield return new WaitForSeconds(StopTime);
+
+        rigidbody2D.gravityScale = PlayerGravity;
+        capsuleCollider.enabled = true;
+        this.GetComponent<BoxCollider2D>().enabled = true;
+
+        foreach (GameObject deathzone in Enemies)
+        {
+            if (deathzone.GetComponent<AIPatrol>() != null)
+            {
+                deathzone.GetComponent<AIPatrol>().enabled = true;
+            }
+        }
 
         this.transform.position = CheckPoint.position;
     }
