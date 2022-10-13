@@ -232,7 +232,11 @@ public class PlayerController : MonoBehaviour
         else
         {
             animator.SetBool("IsMoving", false);
-            rigidbody2D.velocity *= fSpeed / 10;
+
+            if (bCanJump)
+            {
+                rigidbody2D.velocity = new Vector2(fSpeed / 10, rigidbody2D.velocity.y);
+            }
         }
 
 
