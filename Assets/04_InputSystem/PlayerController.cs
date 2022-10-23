@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     //Info for switch characters
     public PlayableCharacter currentCharacter;
 
+    [Header("Universal Character info")]
+    public float fPlayerPushback = 10000000000;
+
     //Character's unique stats, not used in the actual calculations, just used to set variables that are actually used in the calculations
     [Header("Spring's Movement")]
     public float fSpringJumpForce = 5f;
@@ -235,11 +238,21 @@ public class PlayerController : MonoBehaviour
 
             if (bCanJump)
             {
-                rigidbody2D.velocity = new Vector2(fSpeed / 10, rigidbody2D.velocity.y);
+
+
+                if(rigidbody2D.velocity.x >= 0.1 && rigidbody2D.velocity.x <= -0.1)
+                {
+                    rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x - (fSpeed * 10000000000), rigidbody2D.velocity.y);
+                }
+                
+                //Complete stop to character if verlocity it between these two numbers
+                if(rigidbody2D.velocity.x <= 0.1 && rigidbody2D.velocity.x > -0.1)
+                {
+                    rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
+                }
             }
+
         }
-
-
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -438,6 +451,8 @@ public class PlayerController : MonoBehaviour
     {
         CameraShake.Instance.Shake(0.1f, 5f);
 
+        CancelInvoke();
+
         StartCoroutine(ScreenStop(1));
     }
 
@@ -446,7 +461,7 @@ public class PlayerController : MonoBehaviour
     {
         GameObject [] Enemies = GameObject.FindGameObjectsWithTag("DeathZone");
 
-        float PlayerGravity = rigidbody2D.gravityScale;
+        //float PlayerGravity = rigidbody2D.gravityScale;
         capsuleCollider.enabled = false;
         this.GetComponent<BoxCollider2D>().enabled = false;
         rigidbody2D.velocity = Vector2.zero;
@@ -462,9 +477,9 @@ public class PlayerController : MonoBehaviour
         }
         yield return new WaitForSeconds(StopTime);
 
-        rigidbody2D.gravityScale = PlayerGravity;
         capsuleCollider.enabled = true;
         this.GetComponent<BoxCollider2D>().enabled = true;
+        rigidbody2D.gravityScale = 1;
 
         foreach (GameObject deathzone in Enemies)
         {
