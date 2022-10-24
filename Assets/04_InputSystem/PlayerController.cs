@@ -242,7 +242,7 @@ public class PlayerController : MonoBehaviour
 
                 if(rigidbody2D.velocity.x >= 0.1 && rigidbody2D.velocity.x <= -0.1)
                 {
-                    rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x - (fSpeed * 10000000000), rigidbody2D.velocity.y);
+                    rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x - (fSpeed * fPlayerPushback), rigidbody2D.velocity.y);
                 }
                 
                 //Complete stop to character if verlocity it between these two numbers
