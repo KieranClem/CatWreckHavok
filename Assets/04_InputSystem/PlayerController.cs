@@ -88,6 +88,9 @@ public class PlayerController : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
+    //Checks if the player is in screen stop to prevent them from moving if they are
+    private bool bIsStopped = false;
+
     private void Awake()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
@@ -127,43 +130,45 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //If player lands on top of enemy bounces them up, currently only goes up same height as normaal jump
-        if(!bCanJump)
+        if (!bIsStopped)
         {
-            float extraHeight = 0.1f;
-            if (currentCharacter == PlayableCharacter.Spring)
+            //If player lands on top of enemy bounces them up, currently only goes up same height as normaal jump
+            if (!bCanJump)
             {
-                RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, enemyLayerMask);
-                if (raycastHit.collider != null)
-                {
-                    rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
-                    rigidbody2D.AddForce(Vector2.up * fSpringBounce, ForceMode2D.Impulse);
-                }
-            }
-
-            float extraHeightLanding = 0.01f;
-            //Checks if the player hits the floor
-            RaycastHit2D JumpRaycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeightLanding, platformLayerMask);
-            if(JumpRaycastHit.collider != null)
-            {
-                bCanDash = true;
-                bCanJump = true;
-                bCoyoteTimeActive = false;
-                bInStomp = false;
+                float extraHeight = 0.1f;
                 if (currentCharacter == PlayableCharacter.Spring)
                 {
-                    bDoubleJump = true;
-                }
-                animator.SetBool("IsJumping", false);
-                //Stops stoming animation
-                if (currentCharacter == PlayableCharacter.Slam)
-                {
-                    animator.SetBool("isStomping", false);
+                    RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, enemyLayerMask);
+                    if (raycastHit.collider != null)
+                    {
+                        rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                        rigidbody2D.AddForce(Vector2.up * fSpringBounce, ForceMode2D.Impulse);
+                    }
                 }
 
+                float extraHeightLanding = 0.01f;
+                //Checks if the player hits the floor
+                RaycastHit2D JumpRaycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeightLanding, platformLayerMask);
+                if (JumpRaycastHit.collider != null)
+                {
+                    bCanDash = true;
+                    bCanJump = true;
+                    bCoyoteTimeActive = false;
+                    bInStomp = false;
+                    if (currentCharacter == PlayableCharacter.Spring)
+                    {
+                        bDoubleJump = true;
+                    }
+                    animator.SetBool("IsJumping", false);
+                    //Stops stoming animation
+                    if (currentCharacter == PlayableCharacter.Slam)
+                    {
+                        animator.SetBool("isStomping", false);
+                    }
+
+                }
             }
         }
-
 
         if(bInStomp)
         {
@@ -204,119 +209,130 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
         }
+        
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        //Basic movement, gets the player inputs and moves them in the direction they pressed
         Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
-        rigidbody2D.AddForce(new Vector2(inputVector.x, 0) * fSpeed, ForceMode2D.Impulse);
 
-        //Plays the animation for moving, flips the sprite if moving left
-        if (inputVector.x > 0)
+        if (!bIsStopped)
         {
-            LeftRightDash = true;
-            spriteRenderer.flipX = false;
-            if (bCanJump)
-            {
-                animator.SetBool("IsMoving", true);
-            }
-        }
-        else if (inputVector.x < 0)
-        {
-            LeftRightDash = false;
-            spriteRenderer.flipX = true;
-            if (bCanJump)
-            {
-                animator.SetBool("IsMoving", true);
-            }
-        }
-        else
-        {
-            animator.SetBool("IsMoving", false);
-
-            if (bCanJump)
-            {
+            //Basic movement, gets the player inputs and moves them in the direction they pressed
+            rigidbody2D.AddForce(new Vector2(inputVector.x, 0) * fSpeed, ForceMode2D.Impulse);
 
 
-                if(rigidbody2D.velocity.x >= 0.1 && rigidbody2D.velocity.x <= -0.1)
+            //Plays the animation for moving, flips the sprite if moving left
+            if (inputVector.x > 0)
+            {
+                LeftRightDash = true;
+                spriteRenderer.flipX = false;
+                if (bCanJump)
                 {
-                    rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x - (fSpeed * fPlayerPushback), rigidbody2D.velocity.y);
-                }
-                
-                //Complete stop to character if verlocity it between these two numbers
-                if(rigidbody2D.velocity.x <= 0.1 && rigidbody2D.velocity.x > -0.1)
-                {
-                    rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
+                    animator.SetBool("IsMoving", true);
                 }
             }
+            else if (inputVector.x < 0)
+            {
+                LeftRightDash = false;
+                spriteRenderer.flipX = true;
+                if (bCanJump)
+                {
+                    animator.SetBool("IsMoving", true);
+                }
+            }
+            else
+            {
+                animator.SetBool("IsMoving", false);
 
+                if (bCanJump)
+                {
+
+
+                    if (rigidbody2D.velocity.x >= 0.1 && rigidbody2D.velocity.x <= -0.1)
+                    {
+                        rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x - (fSpeed * fPlayerPushback), rigidbody2D.velocity.y);
+                    }
+
+                    //Complete stop to character if verlocity it between these two numbers
+                    if (rigidbody2D.velocity.x <= 0.1 && rigidbody2D.velocity.x > -0.1)
+                    {
+                        rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
+                    }
+                }
+
+            }
         }
     }
 
     public void Jump(InputAction.CallbackContext context)
     {
-
-        //Normal Jump, checks if the player has already jumped
-        if (context.performed && bCanJump)
+        if (!bIsStopped)
         {
-            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
-            rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
-            //bCanJump = false;
-            animator.SetBool("IsJumping", true);
-        }
-        //Double Jump, checks if the player has already performed the double jump
-        else if(context.performed && bDoubleJump)
-        {
-            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
-            rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
-            bDoubleJump = false;
+            //Normal Jump, checks if the player has already jumped
+            if (context.performed && bCanJump)
+            {
+                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
+                //bCanJump = false;
+                animator.SetBool("IsJumping", true);
+            }
+            //Double Jump, checks if the player has already performed the double jump
+            else if (context.performed && bDoubleJump)
+            {
+                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                rigidbody2D.AddForce(Vector2.up * fJumpForce, ForceMode2D.Impulse);
+                bDoubleJump = false;
+            }
         }
     }
 
     public void Dash(InputAction.CallbackContext context)
     {
-        if(context.performed && bCanDash)
+        if (!bIsStopped)
         {
-            //Stores player's input
-            Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
+            if (context.performed && bCanDash)
+            {
+                //Stores player's input
+                Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
 
-            //Checks which direction the player is dashing in
-            if(inputVector.x > 0)
-            {
-                rigidbody2D.velocity = Vector2.right * fDashSpeed;
-            }
-            else if (inputVector.x < 0)
-            {
-                rigidbody2D.velocity = Vector2.left * fDashSpeed;
-            }
-            else
-            {
-                //Dash when the player hasn't been moving
-                if(LeftRightDash)
+                //Checks which direction the player is dashing in
+                if (inputVector.x > 0)
+                {
                     rigidbody2D.velocity = Vector2.right * fDashSpeed;
-                else
+                }
+                else if (inputVector.x < 0)
+                {
                     rigidbody2D.velocity = Vector2.left * fDashSpeed;
-            }
+                }
+                else
+                {
+                    //Dash when the player hasn't been moving
+                    if (LeftRightDash)
+                        rigidbody2D.velocity = Vector2.right * fDashSpeed;
+                    else
+                        rigidbody2D.velocity = Vector2.left * fDashSpeed;
+                }
 
-            animator.SetBool("IsDashing", true);
+                animator.SetBool("IsDashing", true);
 
-            //Stops previous dash counter if active
-            StopCoroutine(DashCounter());
-            //Starts new one
-            StartCoroutine(DashCounter());
+                //Stops previous dash counter if active
+                StopCoroutine(DashCounter());
+                //Starts new one
+                StartCoroutine(DashCounter());
 
-            //checks if the player is still on the ground, allows them to keep dashing if they are
-            float extraHeight = 0.01f;
-            RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, platformLayerMask);
-            if(raycastHit.collider != null)
-            {
-                bCanDash = true;
-            }
-            else
-            {
-                bCanDash = false;
+                //checks if the player is still on the ground, allows them to keep dashing if they are
+                float extraHeight = 0.01f;
+                RaycastHit2D raycastHit = Physics2D.Raycast(capsuleCollider.bounds.center, Vector2.down, capsuleCollider.bounds.extents.y + extraHeight, platformLayerMask);
+                if (raycastHit.collider != null)
+                {
+                    bCanDash = true;
+                }
+                else
+                {
+                    bCanDash = false;
+                }
             }
         }
     }
@@ -332,38 +348,41 @@ public class PlayerController : MonoBehaviour
 
     public void Stomp(InputAction.CallbackContext context)
     {
-        //Checks if the player is in the air before being able to stomp
-        if(context.performed)
+        if (!bIsStopped)
         {
-            //If the player is on the ground they will charge left or right
-            if (bCanJump)
+            //Checks if the player is in the air before being able to stomp
+            if (context.performed)
             {
-                Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
-                if (inputVector.x > 0)
+                //If the player is on the ground they will charge left or right
+                if (bCanJump)
+                {
+                    Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
+                    if (inputVector.x > 0)
+                    {
+                        rigidbody2D.velocity = Vector2.zero;
+                        rigidbody2D.velocity = Vector2.right * fStompSpeed;
+                        bInStomp = true;
+                        animator.SetBool("isStomping", true);
+                    }
+                    else if (inputVector.x < 0)
+                    {
+                        rigidbody2D.velocity = Vector2.zero;
+                        rigidbody2D.velocity = Vector2.left * fStompSpeed;
+                        bInStomp = true;
+                        animator.SetBool("isStomping", true);
+                    }
+                    StartCoroutine(SlamCounter());
+                }
+                //Stomps down if the player is in the air
+                else
                 {
                     rigidbody2D.velocity = Vector2.zero;
-                    rigidbody2D.velocity = Vector2.right * fStompSpeed;
+                    rigidbody2D.velocity = Vector2.down * fStompSpeed;
                     bInStomp = true;
                     animator.SetBool("isStomping", true);
                 }
-                else if (inputVector.x < 0)
-                {
-                    rigidbody2D.velocity = Vector2.zero;
-                    rigidbody2D.velocity = Vector2.left * fStompSpeed;
-                    bInStomp = true;
-                    animator.SetBool("isStomping", true);
-                }
-                StartCoroutine(SlamCounter());
-            }
-            //Stomps down if the player is in the air
-            else
-            {
-                rigidbody2D.velocity = Vector2.zero;
-                rigidbody2D.velocity = Vector2.down * fStompSpeed;
-                bInStomp = true;
-                animator.SetBool("isStomping", true);
-            }
 
+            }
         }
     }
 
@@ -453,7 +472,10 @@ public class PlayerController : MonoBehaviour
 
         CancelInvoke();
 
-        StartCoroutine(ScreenStop(1));
+        if (!bIsStopped)
+        {
+            StartCoroutine(ScreenStop(1));
+        }
     }
 
     //stops the screen
@@ -461,7 +483,9 @@ public class PlayerController : MonoBehaviour
     {
         GameObject [] Enemies = GameObject.FindGameObjectsWithTag("DeathZone");
 
-        //float PlayerGravity = rigidbody2D.gravityScale;
+        bIsStopped = true;
+
+        float PlayerGravity = rigidbody2D.gravityScale;
         capsuleCollider.enabled = false;
         this.GetComponent<BoxCollider2D>().enabled = false;
         rigidbody2D.velocity = Vector2.zero;
@@ -479,7 +503,7 @@ public class PlayerController : MonoBehaviour
 
         capsuleCollider.enabled = true;
         this.GetComponent<BoxCollider2D>().enabled = true;
-        rigidbody2D.gravityScale = 1;
+        rigidbody2D.gravityScale = PlayerGravity;
 
         foreach (GameObject deathzone in Enemies)
         {
@@ -488,6 +512,8 @@ public class PlayerController : MonoBehaviour
                 deathzone.GetComponent<AIPatrol>().enabled = true;
             }
         }
+
+        bIsStopped = false;
 
         this.transform.position = CheckPoint.position;
     }
