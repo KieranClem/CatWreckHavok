@@ -244,21 +244,21 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                animator.SetBool("IsMoving", false);
+               
 
                 if (bCanJump)
                 {
-
-
                     if (rigidbody2D.velocity.x >= 0.1 && rigidbody2D.velocity.x <= -0.1)
                     {
                         rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x - (fSpeed * fPlayerPushback), rigidbody2D.velocity.y);
+                        animator.SetBool("IsMoving", false);
                     }
 
                     //Complete stop to character if verlocity it between these two numbers
                     if (rigidbody2D.velocity.x <= 0.1 && rigidbody2D.velocity.x > -0.1)
                     {
                         rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
+                        animator.SetBool("IsMoving", false);
                     }
                 }
 
