@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Universal Character info")]
     public float fPlayerPushback = 10000000000;
+    public float fSlowdown = 1;
 
     //Character's unique stats, not used in the actual calculations, just used to set variables that are actually used in the calculations
     [Header("Spring's Movement")]
@@ -209,7 +210,8 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
         }
-        
+
+        Debug.Log(rigidbody2D.velocity.x);
     }
 
     // Update is called once per frame
@@ -248,9 +250,18 @@ public class PlayerController : MonoBehaviour
 
                 if (bCanJump)
                 {
-                    if (rigidbody2D.velocity.x >= 0.1 && rigidbody2D.velocity.x <= -0.1)
+                    //0.1
+                    if (rigidbody2D.velocity.x >= 0.1)
                     {
-                        rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x - (fSpeed * fPlayerPushback), rigidbody2D.velocity.y);
+                        //rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x - (fSpeed * fPlayerPushback), rigidbody2D.velocity.y);
+                        //rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x * 0.9f, rigidbody2D.velocity.y);
+                        //rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x * 0.9f, rigidbody2D.velocity.y);
+                        rigidbody2D.AddForce(new Vector2(-fSlowdown, 0) * fSpeed, ForceMode2D.Impulse);
+                        animator.SetBool("IsMoving", false);
+                    }
+                    else if(rigidbody2D.velocity.x <= -0.1)
+                    {
+                        rigidbody2D.AddForce(new Vector2(fSlowdown, 0) * fSpeed, ForceMode2D.Impulse);
                         animator.SetBool("IsMoving", false);
                     }
 
