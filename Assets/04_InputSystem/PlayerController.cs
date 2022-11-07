@@ -211,7 +211,7 @@ public class PlayerController : MonoBehaviour
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
         }
 
-        Debug.Log(rigidbody2D.velocity.x);
+        //Debug.Log(rigidbody2D.velocity.x);
     }
 
     // Update is called once per frame
@@ -251,7 +251,7 @@ public class PlayerController : MonoBehaviour
                 if (bCanJump)
                 {
                     //0.1
-                    if (rigidbody2D.velocity.x >= 0.1)
+                    if (rigidbody2D.velocity.x >= 0.5)
                     {
                         //rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x - (fSpeed * fPlayerPushback), rigidbody2D.velocity.y);
                         //rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x * 0.9f, rigidbody2D.velocity.y);
@@ -259,14 +259,14 @@ public class PlayerController : MonoBehaviour
                         rigidbody2D.AddForce(new Vector2(-fSlowdown, 0) * fSpeed, ForceMode2D.Impulse);
                         animator.SetBool("IsMoving", false);
                     }
-                    else if(rigidbody2D.velocity.x <= -0.1)
+                    else if(rigidbody2D.velocity.x <= -0.5)
                     {
                         rigidbody2D.AddForce(new Vector2(fSlowdown, 0) * fSpeed, ForceMode2D.Impulse);
                         animator.SetBool("IsMoving", false);
                     }
 
                     //Complete stop to character if verlocity it between these two numbers
-                    if (rigidbody2D.velocity.x <= 0.1 && rigidbody2D.velocity.x > -0.1)
+                    if (rigidbody2D.velocity.x <= 0.5 && rigidbody2D.velocity.x > -0.5)
                     {
                         rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
                         animator.SetBool("IsMoving", false);
