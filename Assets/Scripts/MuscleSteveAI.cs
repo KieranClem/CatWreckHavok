@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MuscleSteveAI : MonoBehaviour
 {
-
+    [Header("Thrown Item Info")]
     //Thrown Item information
     public GameObject ThrownItem;
     private GameObject SpawnedItem;
@@ -13,19 +13,32 @@ public class MuscleSteveAI : MonoBehaviour
     private bool bItemSpawned = false;
     private bool bReachedTop = false;
 
+    [Header("Health Info")]
+    public int iMaxHealth = 3;
+    private int iCurrentHealth;
+
+    [Header("Platform that needs to be destroyed")]
+    public GameObject Platform;
+
+    private PunchEmJoeAI PunchEmJoeAI;
+
     private GameObject Player;
     private bool bMovingToPlayer = false;
+
+    private bool bFalling = false;
     
     // Start is called before the first frame update
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player").gameObject;
+        PunchEmJoeAI = GameObject.FindGameObjectWithTag("PunchEmJoe").GetComponent<PunchEmJoeAI>();
+        iCurrentHealth = iMaxHealth;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!bItemSpawned)
+        if (!bItemSpawned && !bFalling)
         {
             SpawnedItem = Instantiate(ThrownItem, new Vector3(this.transform.position.x, this.transform.position.y + 1, this.transform.position.z), Quaternion.identity);
             SpawnedItem.GetComponent<ThrownItem>().muscleSteveAI = this;
@@ -59,5 +72,50 @@ public class MuscleSteveAI : MonoBehaviour
         bItemSpawned = false;
         bReachedTop = false;
         bMovingToPlayer = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject == Player)
+        {
+            if(Player.transform.position.y > this.transform.position.y)
+            {
+                if(Platform != null)
+                {
+                    Destroy(Platform);
+                    TakeDamage();
+                    bFalling = true;
+                }
+                PunchEmJoeAI.ChangePhase();
+            }
+            else
+            {
+
+            }
+        }
+
+        if(collision.tag == "Floor")
+        {
+            bFalling = false;
+        }
+    }
+
+    public void TakeDamage()
+    {
+        iCurrentHealth -= 1;
+
+        if(iCurrentHealth == 0)
+        {
+            //Defeat information goes here
+        }
+        else if(iCurrentHealth != (iMaxHealth - 1))
+        {
+            PushPunchEmJoeBack();
+        }
+    }
+
+    public void PushPunchEmJoeBack()
+    {
+        PunchEmJoeAI.GetComponent<Rigidbody2D>().AddForce(new Vector2(ThrownSpeed, 0), ForceMode2D.Impulse);
     }
 }

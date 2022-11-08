@@ -14,6 +14,8 @@ TagManager:
   - LevelEntrance
   - PressurePlate
   - Patrol Zone
+  - MuscleSteve
+  - PunchEmJoe
   layers:
   - Default
   - TransparentFX

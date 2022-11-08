@@ -110,7 +110,7 @@ public class PunchEmJoeAI : MonoBehaviour
                 switch (PhaseNumber)
                 {
                     case 1:
-                        StartCoroutine(StartCharging(fPhase1ChargeTimeBeforeLockingDirection, fPhase1ChargeTimeAfterLockingDirection, fPhase1ChargeAttackDuration, fPhase1ChargeAttackDuration));
+                        //StartCoroutine(StartCharging(fPhase1ChargeTimeBeforeLockingDirection, fPhase1ChargeTimeAfterLockingDirection, fPhase1ChargeAttackDuration, fPhase1ChargeAttackDuration));
                         break;
                     case 2:
                         StartCoroutine(StartCharging(fPhase2ChargeTimeBeforeLockingDirection, fPhase2ChargeTimeAfterLockingDirection, fPhase2ChargeAttackDuration, fPhase2ChargeAttackDuration));
@@ -123,6 +123,18 @@ public class PunchEmJoeAI : MonoBehaviour
             else
             {
                 //reset or knock player back here
+            }
+        }
+
+        if(collision.CompareTag("MuscleSteve"))
+        {
+            if(bFinishedCharging)
+            {
+                collision.GetComponent<MuscleSteveAI>().TakeDamage();
+            }
+            else
+            {
+                collision.GetComponent<MuscleSteveAI>().PushPunchEmJoeBack();
             }
         }
     }
@@ -161,5 +173,12 @@ public class PunchEmJoeAI : MonoBehaviour
         rigidbody2D.velocity = Vector2.zero;
         bIsCharging = false;
         bFinishedCharging = false;
+    }
+
+    public void ChangePhase()
+    {
+        PhaseNumber += 1;
+
+        //include things like animations here
     }
 }

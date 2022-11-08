@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
         playerInputActions.Player.Enable();
         spriteRenderer = GetComponent<SpriteRenderer>();
         
-        SwitchCharacter(currentCharacter);
+        
 
 
         inputActions.actions["SwitchCharacter"].Disable();
@@ -111,7 +111,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        ChangeCameraDetails.AdjustCamera.ChangeCamera(this);
+        SwitchCharacter(currentCharacter);
+        //ChangeCameraDetails.AdjustCamera.ChangeCamera(this);
     }
 
     private void Update()
@@ -475,6 +476,7 @@ public class PlayerController : MonoBehaviour
             fMaxSpeed = fSlamMaxSpeed;
             rigidbody2D.drag = fSlamDrag;
         }
+        ChangeCameraDetails.AdjustCamera.ChangeCamera(this);
     }
 
     private void SendPlayertoCheckPoint()
@@ -549,7 +551,7 @@ public class PlayerController : MonoBehaviour
             case "CharacterSwitcher":
                 inputActions.actions["SwitchCharacter"].Enable();
                 characterSwitch = collision.GetComponent<CharacterSwitch>();
-                ChangeCameraDetails.AdjustCamera.ChangeCamera(this);
+                
                 break;
             //Stores checkpoint if collided with checkpoint
             case "CheckPoint":
@@ -594,6 +596,21 @@ public class PlayerController : MonoBehaviour
                 {
                     //Deactivates ground below, later could add animation of ground breaking but currently will just disappear
                     collision.gameObject.SetActive(false);
+                }
+                break;
+
+            case "MuscleSteve":
+                if ((transform.position.y > collision.transform.position.y))
+                {
+                    rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                    rigidbody2D.AddForce(Vector2.up * fSpringBounce, ForceMode2D.Impulse);
+                }
+                break;
+            case "PunchEmJoe":
+                if ((transform.position.y > collision.transform.position.y))
+                {
+                    rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                    rigidbody2D.AddForce(Vector2.up * fSpringBounce, ForceMode2D.Impulse);
                 }
                 break;
         }
