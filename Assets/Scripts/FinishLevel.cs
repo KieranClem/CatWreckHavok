@@ -10,7 +10,6 @@ public class FinishLevel : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(canFinish);
         if (collision.tag == "Player" && canFinish)
         {
             //Insert change scene info here
