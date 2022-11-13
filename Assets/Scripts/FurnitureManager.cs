@@ -23,7 +23,14 @@ public class FurnitureManager : MonoBehaviour
             furniture.furnitureManager = this;
         }
 
+
         finishLevel = GameObject.FindGameObjectWithTag("FinishLevel").GetComponent<FinishLevel>();
+
+
+        if (iNumOfFurnitureForLevelFinish == 0)
+        {
+            finishLevel.canFinish = true;
+        }
     }
 
     //called when the player knocks down some furniture to add to the ruined furniture list

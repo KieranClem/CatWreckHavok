@@ -14,7 +14,7 @@ public class FinishLevel : MonoBehaviour
         {
             //Insert change scene info here
             SceneManager.LoadScene(SceneToChangeTo);
-
+            Debug.Log("here");
         }
     }
 }

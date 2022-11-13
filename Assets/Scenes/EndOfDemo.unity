@@ -736,9 +736,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Press E on Keyboard to restart
+  m_Text: 'Press Space on Keyboard or South Button on Controller to restart
 
-    Press B on Keyboard to close the game'
+    Press
+    B on Keyboard or East Button on Controller to close the game'
 --- !u!222 &1184674933
 CanvasRenderer:
   m_ObjectHideFlags: 0
