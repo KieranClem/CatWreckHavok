@@ -41,10 +41,10 @@ public class StartGame : MonoBehaviour
                     SceneManager.LoadScene(LevelName);
                 }
             }
-        }
-        else
-        {
-            SceneManager.LoadScene(LevelName);
+            else
+            {
+                SceneManager.LoadScene(LevelName);
+            }
         }
     }
 

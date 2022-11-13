@@ -377,7 +377,18 @@
                 {
                     "name": "",
                     "id": "5ebae097-29c4-4155-a47b-edd04eebf10f",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "StartGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4766ba84-9f92-4487-a387-4998790f341a",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -389,6 +400,17 @@
                     "name": "",
                     "id": "2e384cb0-c613-49bb-8a11-50923665db96",
                     "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "EndGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d4928b7d-b0f1-4210-b10f-f12d18e1e764",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
