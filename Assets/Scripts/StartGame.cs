@@ -12,6 +12,7 @@ public class StartGame : MonoBehaviour
     private PlayerInputActions playerInputActions;
     public Text ControlInfo;
     private int PressCount;
+    public GameObject BackGround;
 
     private void Awake()
     {
@@ -34,6 +35,7 @@ public class StartGame : MonoBehaviour
                 if (PressCount == 0)
                 {
                     PressCount += 1;
+                    BackGround.SetActive(false);
                     ControlInfo.gameObject.SetActive(true);
                 }
                 else
@@ -61,6 +63,7 @@ public class StartGame : MonoBehaviour
         if (PressCount == 0)
         {
             PressCount += 1;
+            BackGround.SetActive(false);
             ControlInfo.gameObject.SetActive(true);
         }
         else
