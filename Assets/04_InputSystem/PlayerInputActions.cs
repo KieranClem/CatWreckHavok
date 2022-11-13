@@ -371,6 +371,54 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""TitleAndEndButtons"",
+            ""id"": ""84b487a6-5b96-4d9a-97b5-a99d6613552c"",
+            ""actions"": [
+                {
+                    ""name"": ""StartGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""0455d4e0-eaa8-4b2e-b3d9-b097d79b9de6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EndGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""123bc6d1-92a8-4d8a-9c9b-1ab91b9d37da"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""5ebae097-29c4-4155-a47b-edd04eebf10f"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e384cb0-c613-49bb-8a11-50923665db96"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EndGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -412,6 +460,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_OverworldPlayerMovement = asset.FindActionMap("OverworldPlayerMovement", throwIfNotFound: true);
         m_OverworldPlayerMovement_Movement = m_OverworldPlayerMovement.FindAction("Movement", throwIfNotFound: true);
         m_OverworldPlayerMovement_Select = m_OverworldPlayerMovement.FindAction("Select", throwIfNotFound: true);
+        // TitleAndEndButtons
+        m_TitleAndEndButtons = asset.FindActionMap("TitleAndEndButtons", throwIfNotFound: true);
+        m_TitleAndEndButtons_StartGame = m_TitleAndEndButtons.FindAction("StartGame", throwIfNotFound: true);
+        m_TitleAndEndButtons_EndGame = m_TitleAndEndButtons.FindAction("EndGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -606,6 +658,47 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         }
     }
     public OverworldPlayerMovementActions @OverworldPlayerMovement => new OverworldPlayerMovementActions(this);
+
+    // TitleAndEndButtons
+    private readonly InputActionMap m_TitleAndEndButtons;
+    private ITitleAndEndButtonsActions m_TitleAndEndButtonsActionsCallbackInterface;
+    private readonly InputAction m_TitleAndEndButtons_StartGame;
+    private readonly InputAction m_TitleAndEndButtons_EndGame;
+    public struct TitleAndEndButtonsActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public TitleAndEndButtonsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @StartGame => m_Wrapper.m_TitleAndEndButtons_StartGame;
+        public InputAction @EndGame => m_Wrapper.m_TitleAndEndButtons_EndGame;
+        public InputActionMap Get() { return m_Wrapper.m_TitleAndEndButtons; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(TitleAndEndButtonsActions set) { return set.Get(); }
+        public void SetCallbacks(ITitleAndEndButtonsActions instance)
+        {
+            if (m_Wrapper.m_TitleAndEndButtonsActionsCallbackInterface != null)
+            {
+                @StartGame.started -= m_Wrapper.m_TitleAndEndButtonsActionsCallbackInterface.OnStartGame;
+                @StartGame.performed -= m_Wrapper.m_TitleAndEndButtonsActionsCallbackInterface.OnStartGame;
+                @StartGame.canceled -= m_Wrapper.m_TitleAndEndButtonsActionsCallbackInterface.OnStartGame;
+                @EndGame.started -= m_Wrapper.m_TitleAndEndButtonsActionsCallbackInterface.OnEndGame;
+                @EndGame.performed -= m_Wrapper.m_TitleAndEndButtonsActionsCallbackInterface.OnEndGame;
+                @EndGame.canceled -= m_Wrapper.m_TitleAndEndButtonsActionsCallbackInterface.OnEndGame;
+            }
+            m_Wrapper.m_TitleAndEndButtonsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @StartGame.started += instance.OnStartGame;
+                @StartGame.performed += instance.OnStartGame;
+                @StartGame.canceled += instance.OnStartGame;
+                @EndGame.started += instance.OnEndGame;
+                @EndGame.performed += instance.OnEndGame;
+                @EndGame.canceled += instance.OnEndGame;
+            }
+        }
+    }
+    public TitleAndEndButtonsActions @TitleAndEndButtons => new TitleAndEndButtonsActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -640,5 +733,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
+    }
+    public interface ITitleAndEndButtonsActions
+    {
+        void OnStartGame(InputAction.CallbackContext context);
+        void OnEndGame(InputAction.CallbackContext context);
     }
 }
