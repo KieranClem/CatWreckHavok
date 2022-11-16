@@ -415,6 +415,7 @@ public class PlayerController : MonoBehaviour
             PlayableCharacter storeOld = currentCharacter;
             SwitchCharacter(characterSwitch.characterToSwitchTo);
             characterSwitch.characterToSwitchTo = storeOld;
+            characterSwitch.ChangeAnimation();
         }  
     }
 
@@ -512,7 +513,20 @@ public class PlayerController : MonoBehaviour
                 deathzone.GetComponent<AIPatrol>().enabled = false;
             }
         }
-        yield return new WaitForSeconds(StopTime);
+
+        animator.SetBool("IsMoving", false);
+        animator.SetBool("IsJumping", false);
+
+        if (currentCharacter == PlayableCharacter.Dash)
+        {
+            animator.SetBool("IsDashing", false);
+        }
+
+        animator.SetBool("IsHit", true);
+
+        float deathAnimationTime = animator.GetCurrentAnimatorClipInfo(0).Length;
+
+        yield return new WaitForSeconds(deathAnimationTime);
 
         capsuleCollider.enabled = true;
         this.GetComponent<BoxCollider2D>().enabled = true;
@@ -529,6 +543,7 @@ public class PlayerController : MonoBehaviour
         bIsStopped = false;
 
         this.transform.position = CheckPoint.position;
+        animator.SetBool("IsHit", false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
