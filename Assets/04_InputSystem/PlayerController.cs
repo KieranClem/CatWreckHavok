@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     public PlayableCharacter currentCharacter;
 
     [Header("Universal Character info")]
-    public float fPlayerPushback = 10000000000;
     public float fSlowdown = 1;
 
     //Character's unique stats, not used in the actual calculations, just used to set variables that are actually used in the calculations
